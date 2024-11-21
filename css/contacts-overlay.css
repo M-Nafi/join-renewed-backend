@@ -1,0 +1,221 @@
+body {
+  overflow-x: hidden !important;
+}
+
+.overlay-add-contact {
+  position: absolute;
+  top: 30%;  
+  display: flex;
+  flex-direction: row;
+  width: 121.2rem;
+  height: 59.2rem;
+  background: #fff;
+  border-radius: 3rem;
+  right: -100%;
+  border: 1px solid lightgray;  
+}
+
+.overlay-add-contact.show {  
+  animation: moveIn 0.3s forwards;
+}
+
+.overlay-add-contact.close {
+  animation: moveOut 0.3s forwards;
+}
+
+@keyframes moveIn {
+  0% {    
+    opacity: 0;
+  }
+  100% {
+    right: 50%;
+    opacity: 1;
+    transform: translateX(50%);
+  }
+}
+
+@keyframes moveOut {
+  0% {    
+    right: 50%;
+    opacity: 1;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.overlay-container-left {
+  display: inline-flex;
+  width: 46.7rem;
+  padding: 6.6rem 4.8rem !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.2rem;
+  flex-shrink: 0;
+  background: #2a3647;
+  border-bottom-left-radius: 3rem;
+  border-top-left-radius: 3rem;
+}
+
+.add-contact-overlay-icon {
+  width: 5.56rem;
+  height: 6.6483rem;
+  left: 4.6904rem;
+  top: 15.4rem;
+}
+
+.overlay-letter-add-contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.8rem;
+  color: #fff;
+  font-size: 6.1rem;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+.overlay-letters-better {
+  color: #fff;
+  font-size: 2.7rem;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.overlay-vectorline-horizontal {
+  width: 9rem;
+  height: 0.3rem;
+  background-color: #29abe2;
+}
+
+.overlay-container-right {
+  display: inline-flex;
+  flex-direction: column;
+  width: 74.5rem;  
+}
+
+.overlay-add-contact-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3.2rem;
+  padding-top: 13.7rem;
+  padding-left: 27.5rem;
+  background-color: white;
+  border-top-right-radius: 3rem;
+}
+
+.overlay-close {
+  display: block;
+  position: absolute;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0.4rem;
+  flex-shrink: 0;
+  border-radius: 5.6rem;
+  padding-left: 66.5rem;
+  padding-top: 4.8rem;
+}
+
+.oyerlay-close-img {
+  cursor: pointer;
+}
+
+.oyerlay-close-img:hover {
+  border-radius: 50%;
+  background-color: lightgray;
+}
+
+.overlay-input-data {
+  display: flex;
+  width: 42.2rem;
+  padding: 1.3rem 2.1rem;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #d1d1d1;
+  background: #fff;
+  line-height: 120%;
+}
+
+.overlay-input-data:focus-within {
+  color: #29abe2;
+  border: 1px solid #29abe2;
+}
+
+.overlay-contact-icons {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+  color: #a8a8a8;
+}
+
+.overlay-cancel-button {
+  display: flex;
+  height: 100%;
+  padding: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #2a3647;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 120%;
+  cursor: pointer;
+}
+
+.overlay-cancel-button:hover {
+  color: #29abe2;
+  border: 1px solid #29abe2;
+  box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.25);
+}
+
+.overlay-cancel-button:hover path {
+  fill: #29abe2;
+}
+
+.overlay-create-contact-button {
+  display: flex;
+  padding: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 1rem;
+  background: #2a3647;
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 120%;
+  cursor: pointer;
+}
+
+.overlay-create-contact-button:hover {
+  background-color: #29abe2;
+  box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.25);
+}
+
+.overlay-contact-circle {
+  position: absolute;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 27.5rem;
+  height: 59.2rem;
+}
+
+.contact-gray {
+  border-radius: 7rem;
+  border: 0.3rem solid #fff;
+  background: #fff;
+  box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.contact-person-white {
+  width: 6.4rem;
+  height: 6.4rem;
+  position: absolute;
+}

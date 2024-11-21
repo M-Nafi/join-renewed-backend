@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join</title>
+    <link rel="icon" type="image/svg" href="./assets/img/LogoFavicon.svg">
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./fonts.css" />
+    <link rel="stylesheet" href="./css/sidebar-header_template.css">
+    <link rel="stylesheet" href="./css/mobile-header-footer.css">
+    <link rel="stylesheet" href="./css/legal_notice.css">
+    <script src="script.js"></script>
+    <script src="./js/sidebar-header.js"></script>
+    <script src="./js/impressum-without-log-in.js"></script>
+</head>
+
+<body onload="init()">
+    <div class="w3include-container">
+        <div w3-include-html="assets/templates/sidebar_template.html"></div>
+        <main class="legal-notice-content">
+            <div w3-include-html="assets/templates/header_template.html" class="w3-header"></div>
+
+            <div class='impressum'>
+                <h1>Impressum</h1><br>
+                <p>Angaben gemäß § 5 TMG</p>
+                <br>
+                <p>Michal Galas <br>
+                    Topfseifersdorfer Str.<br>
+                    09648 Mittweida <br>
+                </p>
+                <br>
+                <p> <strong>Vertreten durch: </strong><br>
+                    Michal Galas<br>
+                    Nafi Müftüoglu<br>
+                    Mario Winter<br>
+                </p>
+                <br>
+                <p><strong>Kontakt:</strong> <br>
+                    Telefon: 123 456789-123 456789<br>
+                    E-Mail: <a href='mailto:michalgalas1989@gmail.com'>michalgalas1989@gmail.com</a></br></p><br>
+                Website Impressum von <a href="https://www.impressum-generator.de">impressum-generator.de</a>
+            </div>
+            <div w3-include-html="assets/templates/mobile_sidebar_template.html"></div>
+        </main>
+    </div>
+
+</body>
+
+</html>

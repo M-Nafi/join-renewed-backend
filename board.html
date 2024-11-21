@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Join</title>
+	<link rel="icon" type="image/svg" href="./assets/img/LogoFavicon.svg" />
+	<link rel="stylesheet" href="./css/sidebar-header_template.css" />
+	<link rel="stylesheet" href="./css/board.css" />
+	<link rel="stylesheet" href="./css/slider.css" />
+	<link rel="stylesheet" href="./css/mobile-header-footer.css" />
+	<link rel="stylesheet" href="./css/add-task-slider.css" />
+	<link rel="stylesheet" href="./css/edit-board-slider.css" />
+	<link rel="stylesheet" href="./fonts.css" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="./css/mobile_board.css" />
+	
+	<script src="./js/contacts_generate_html.js"></script>
+	<script src="./js/storage.js"></script>
+	<script src="./script.js"></script>
+	<script src="./js/render-board.js"></script>
+	<script src="./js/render-add-task-slider.js"></script>
+	<script src="./js/task-move-to.js"></script>
+	<script src="./js/board.js"></script>
+	<script src="./js/sidebar-header.js"></script>
+	<script src="./js/add-task-slider.js"></script>
+	<script src="./js/task-open.js"></script>
+	<script src="./js/task-edit.js"></script>
+	<script src="./js/slider.js"></script>
+</head>
+
+<body class="mobile-body" onload="includeHTML(); initBoard();">
+	<div class="w3include-container">
+		<!-- sidebar template -->
+		<div w3-include-html="assets/templates/sidebar_template.html"></div>
+
+		<main id="main_container_board" class="main-container-board">
+			<!-- header template -->
+			<div w3-include-html="assets/templates/header_template.html" class="w3-header"></div>
+			<!-- board container -->
+			<div class="board-container">
+				<!-- board Header -->
+				<div class="board-head">
+					<h1>Board</h1>
+					<div id="search_on_task_container">
+						<div id="input_section">
+							<input id="find_task" type="text" placeholder="Find Task"
+								onkeyup="searchTask(); setTimeout(closeFilter(),1000)" />
+							<div class="task-search-field">
+								<div class="seperator"></div>
+								<div class="search-button" onclick="searchTask()">
+									<svg width="1.8rem" height="1.8rem" viewBox="0 0 18 18" fill="none"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M6.71181 13.2137C4.89463 13.2137 3.35669 12.5843 2.098 11.3256C0.839307 10.0669 0.209961 8.52899 0.209961 6.71181C0.209961 4.89463 0.839307 3.35669 2.098 2.098C3.35669 0.839307 4.89463 0.209961 6.71181 0.209961C8.52899 0.209961 10.0669 0.839307 11.3256 2.098C12.5843 3.35669 13.2137 4.89463 13.2137 6.71181C13.2137 7.44535 13.097 8.13721 12.8636 8.7874C12.6302 9.43758 12.3134 10.0127 11.9133 10.5129L17.5149 16.1145C17.6983 16.2979 17.79 16.5313 17.79 16.8147C17.79 17.0981 17.6983 17.3315 17.5149 17.5149C17.3315 17.6983 17.0981 17.79 16.8147 17.79C16.5313 17.79 16.2979 17.6983 16.1145 17.5149L10.5129 11.9133C10.0127 12.3134 9.43758 12.6302 8.7874 12.8636C8.13721 13.097 7.44535 13.2137 6.71181 13.2137ZM6.71181 11.2131C7.96217 11.2131 9.02497 10.7755 9.90022 9.90022C10.7755 9.02497 11.2131 7.96217 11.2131 6.71181C11.2131 5.46145 10.7755 4.39865 9.90022 3.5234C9.02497 2.64815 7.96217 2.21053 6.71181 2.21053C5.46145 2.21053 4.39865 2.64815 3.5234 3.5234C2.64815 4.39865 2.21053 5.46145 2.21053 6.71181C2.21053 7.96217 2.64815 9.02497 3.5234 9.90022C4.39865 10.7755 5.46145 11.2131 6.71181 11.2131Z"
+											fill="#2A3647"></path>
+									</svg>
+								</div>
+							</div>
+						</div>
+						<div id="no_task_found">No tasks found!</div>
+					</div>
+					<div id="add_task_button" onclick="loadAddTaskSlider('to-do')">
+						<div>
+							<span class="mobile-d-none">Add task</span>
+							<svg width="2.0rem" height="2.0rem" viewBox="0 0 20 20" fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M8.73438 11.3327H0.734375V8.66602H8.73438V0.666016H11.401V8.66602H19.401V11.3327H11.401V19.3327H8.73438V11.3327Z"
+									fill="white"></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+
+				<!-- Board Content Colums-->
+				<div id="board_content">
+					<div id="board_todo_section" class="column-section">
+						<!-- Tasks Column Header -->
+						<div id="board_todo_section_head" class="column-title-area">
+							<h3>To Do</h3>
+							<svg onclick="loadAddTaskSlider('to-do')" width="2.4rem" height="2.4rem" viewBox="0 0 24 24"
+								fill="none" xmlns="http://www.w3.org/2000/svg"
+								onclick="addTaskSlider('to-do'); handleInputFocus();">
+								<path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round"></path>
+								<path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2"
+									stroke-linecap="round"></path>
+								<rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2">
+								</rect>
+							</svg>
+						</div>
+
+						<!-- To Do Task Drop Zone-->
+						<div id="to-do" class="column-drop-zone" ondrop="moveTo('to-do'); removeHighlight('to-do')"
+							ondragover="allowDrop(event), highlight('to-do')" ondragleave="removeHighlight('to-do')"
+							style="padding: 0px; height: 100%">
+							<!-- Task Card -->
+						</div>
+					</div>
+
+					<div id="board_in_progress_section" class="column-section">
+						<!-- Tasks Column Header -->
+						<div id="board_in_porogress_section_head" class="column-title-area">
+							<h3>In progress</h3>
+							<svg onclick="loadAddTaskSlider('in-progress')" width="2.4rem" height="2.4rem"
+								viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+								onclick="addTaskSlider('in-progress'); handleInputFocus();">
+								<path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round"></path>
+								<path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2"
+									stroke-linecap="round"></path>
+								<rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2">
+								</rect>
+							</svg>
+						</div>
+						<!-- In Progress Task Drop Zone-->
+						<div id="in-progress" class="column-drop-zone"
+							ondrop="moveTo('in-progress'); removeHighlight('in-progress')"
+							ondragover="allowDrop(event), highlight('in-progress')"
+							ondragleave="removeHighlight('in-progress')" style="padding: 0px; height: 100%">
+							<!-- Task Card -->
+						</div>
+					</div>
+
+					<div id="board_await_feedback_section" class="column-section">
+						<!-- Tasks Column Header -->
+						<div id="board_await_feedback_section_head" class="column-title-area">
+							<h3>Await feedback</h3>
+							<svg onclick="loadAddTaskSlider('await-feedback')" width="2.4rem" height="2.4rem"
+								viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+								onclick="addTaskSlider('await-feedback'); handleInputFocus();">
+								<path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round"></path>
+								<path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2"
+									stroke-linecap="round"></path>
+								<rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2">
+								</rect>
+							</svg>
+						</div>
+						<!-- Await Feedback Task Drop Zone-->
+						<div id="await-feedback" class="column-drop-zone"
+							ondrop="moveTo('await-feedback'); removeHighlight('await-feedback')"
+							ondragover="allowDrop(event), highlight('await-feedback')"
+							ondragleave="removeHighlight('await-feedback')" style="padding: 0px; height: 100%">
+							<!-- Task Card -->
+						</div>
+					</div>
+
+					<div id="board_done_section" class="column-section">
+						<!-- Tasks Column Header -->
+						<div class="column-title-area">
+							<h3 id="board_done_section_head">Done</h3>
+							<svg onclick="loadAddTaskSlider('done')" width="2.4rem" height="2.4rem" viewBox="0 0 24 24"
+								fill="none" xmlns="http://www.w3.org/2000/svg"
+								onclick="addTaskSlider('done'); handleInputFocus();">
+								<path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round"></path>
+								<path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2"
+									stroke-linecap="round"></path>
+								<rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2">
+								</rect>
+							</svg>
+						</div>
+						<!-- Done Task Drop Zone-->
+						<div id="done" class="column-drop-zone" ondrop="moveTo('done'); removeHighlight('done')"
+							ondragover="allowDrop(event), highlight('done')" ondragleave="removeHighlight('done')"
+							style="padding: 0px; height: 100%">
+							<!-- Task Card -->
+						</div>
+					</div>
+				</div>
+
+				<!-- Task Open Content Slider-->
+				<div id="task_overlay_bg" class="slider-center d-none"
+					onclick="hideTaskOpen('task_open_overlay_frame')"></div>
+
+				<!-- Task Added to Board -->
+				<div id="task_added_to_board" class="slider-center d-none">
+					<div class="task-added-on-board">
+						<div>Task added to board</div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="31" height="26" viewBox="0 0 31 26" fill="none">
+							<path
+								d="M23.4544 2.77273L23.4545 23.2271C23.4538 23.8296 23.2142 24.4074 22.7881 24.8334C22.362 25.2595 21.7843 25.4992 21.1817 25.4998L16.6363 25.4998C16.0338 25.4992 15.456 25.2595 15.03 24.8334C14.6039 24.4074 14.3642 23.8296 14.3636 23.2271L14.3636 2.77273C14.3642 2.17015 14.6039 1.59243 15.03 1.16635C15.456 0.740262 16.0338 0.500623 16.6363 0.50002L21.1817 0.50002C21.7843 0.500623 22.362 0.740262 22.7881 1.16635C23.2142 1.59243 23.4538 2.17015 23.4544 2.77273ZM16.6363 23.2271L21.1817 23.2271L21.1817 2.77273L16.6363 2.77273L16.6363 23.2271ZM16.6363 2.77273L16.6363 23.2271C16.6357 23.8296 16.3961 24.4073 15.97 24.8334C15.5439 25.2595 14.9662 25.4991 14.3636 25.4997L9.81823 25.4997C9.21566 25.4991 8.63794 25.2595 8.21185 24.8334C7.78577 24.4073 7.54613 23.8296 7.54553 23.227L7.54553 2.7727C7.54613 2.17013 7.78577 1.59241 8.21185 1.16632C8.63793 0.740238 9.21566 0.500602 9.81823 0.5L14.3636 0.499999C14.9662 0.500602 15.5439 0.740238 15.97 1.16632C16.3961 1.59241 16.6357 2.17015 16.6363 2.77273ZM9.81823 23.227L14.3636 23.2271L14.3636 2.77273L9.81823 2.7727L9.81823 23.227ZM9.81823 2.7727L9.81823 23.227C9.81763 23.8296 9.57799 24.4073 9.15191 24.8334C8.72582 25.2595 8.1481 25.4991 7.54553 25.4997L3.00012 25.4997C2.39755 25.4991 1.81983 25.2595 1.39374 24.8334C0.967657 24.4073 0.728019 23.8296 0.727417 23.227L0.727416 2.7727C0.728018 2.17013 0.967656 1.59241 1.39374 1.16632C1.81982 0.740238 2.39755 0.500603 3.00012 0.5L7.54553 0.5C8.1481 0.500602 8.72582 0.740238 9.1519 1.16632C9.57799 1.59241 9.81763 2.17013 9.81823 2.7727ZM3.00012 23.227L7.54553 23.227L7.54553 2.7727L3.00012 2.7727L3.00012 23.227Z"
+								fill="white" />
+							<path
+								d="M30.2726 2.77298L30.2726 23.2273C30.272 23.8299 30.0323 24.4076 29.6062 24.8337C29.1802 25.2598 28.6024 25.4994 27.9999 25.5L23.4545 25.5C22.8519 25.4994 22.2742 25.2598 21.8481 24.8337C21.422 24.4076 21.1824 23.8296 21.1817 23.2271L21.1817 2.77273C21.1823 2.17015 21.422 1.59268 21.8481 1.1666C22.2742 0.740514 22.8519 0.500876 23.4544 0.500274L27.9999 0.500273C28.6024 0.500876 29.1801 0.740514 29.6062 1.1666C30.0323 1.59268 30.272 2.1704 30.2726 2.77298ZM23.4545 23.2271L27.9999 23.2273L27.9999 2.77298L23.4544 2.77273L23.4545 23.2271Z"
+								fill="white" />
+						</svg>
+					</div>
+				</div>
+			</div>
+			<div w3-include-html="assets/templates/mobile_sidebar_template.html"></div>
+		</main>
+	</div>
+</body>
+
+</html>

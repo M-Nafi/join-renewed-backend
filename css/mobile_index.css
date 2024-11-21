@@ -1,0 +1,211 @@
+.mobile-start-screen {
+    display: none;
+    background-color: var(--primary-dark-blue);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 999;
+}
+
+.sing-up-header-mobile {
+    display: none;
+}
+
+
+
+@keyframes moveAndResizeMobile {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 31.3rem;
+        height: 40.4rem;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        top: 1rem;
+        left: 1rem;
+        transform: translate(0, 0);
+        width: 6.4rem;
+        height: 7.8rem;
+    }
+}
+
+@keyframes screenremove {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        display: none;
+        z-index: 0;
+    }
+}
+
+@media(max-width: 1050px){
+    .sing-up-check-box{
+        width: 100%;
+    }
+
+    @keyframes moveAndResize {
+        0% {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 31.3rem;
+            height: 40.4rem;
+        }
+    
+        100% {
+            top: 2rem;
+            left: 4rem;
+            transform: translate(0, 0);
+            width: 8rem;
+            height: 8.1rem;
+        }
+    }
+}
+
+@media(max-width: 700px) {
+    
+    .log-container {
+        margin-top: 4rem;
+        width: 50.2rem;
+        height: 53.3rem;
+    }
+}
+
+@media(max-width: 569px) {
+
+    html {
+        font-size: 0.360em;
+    }
+
+    .mobile-start-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: screenremove 700ms ease-in-out forwards;
+        animation-delay: 250ms;
+    }
+
+    .mobile-logo {
+        width: 31.3rem;
+        height: 40.4rem;
+        animation: moveAndResizeMobile 1s ease-in-out forwards;
+        animation-delay: 250ms;
+        position: absolute;
+    }
+
+    .sing-up-header {
+        display: none;
+    }
+
+    .sing-up-header-mobile {
+        display: flex;
+        margin-top: 5.7rem;
+        justify-content: center;
+        align-items: center;
+        gap: 3.5rem;
+    }
+
+    .main-container-index {
+        flex-direction: column;
+    }
+
+    .btn-log-in-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: auto;
+
+    }
+
+    .log-container {
+        margin-top: 4rem;
+        width: 58.2rem;
+        height: 66.3rem;
+    }
+
+    .log-in-input-container {
+        width: 53.2rem;
+    }
+
+    .log-in-input-box {
+        height: 6.8rem;
+    }
+
+    .log-in-input-box input {
+        font-size: 3rem
+    }
+
+    .btn-log-mobile {
+        height: 6rem;
+        width: 21rem;
+    }
+
+    .log-in-msg {
+        top: 26.2rem;
+        left: 18rem;
+    }
+
+    input[type="checkbox"]+label::before {
+        width: 3.2rem;
+        height: 2.9rem;
+        font-size: 2rem;
+    }
+
+    input[type="checkbox"]+label {
+        font-size: 2rem;
+        width: 22rem;
+    }
+
+    .footer-text-container {
+        font-size: 2rem;
+    }
+
+    .height-sing-up {
+        height: 76.4rem !important;
+    }
+
+    .sing-up-input-container {
+        gap: 12px;
+    }
+
+    .sing-up-content {
+        width: 52.2rem;
+    }
+
+    .sign-up-btn-container {
+        margin-top: 2.2rem;
+    }
+
+    input[type="checkbox"]+label {
+        font-size: 2rem;
+        width: 47rem;
+    }
+
+}
+
+@media(max-width: 470px) {
+    html{
+        font-size: 0.350rem;
+    }
+}
+
+@media(max-width: 375px) {
+    html{
+        font-size: 0.330rem;
+    }
+}

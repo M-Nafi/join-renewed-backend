@@ -1,0 +1,11 @@
+#Verbieten alle rechtlichen Seiten
+User-agent: *
+
+Disallow: /impressum.html
+Disallow: /datenschutz.html
+Disallow: /consent.html
+Disallow: /legal_notice_without_log_in.html
+Disallow: /legal_notice.html
+Disallow: /privacy_policy.html
+Disallow: /privacy_policy_without_log_in.html
+

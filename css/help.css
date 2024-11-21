@@ -1,0 +1,87 @@
+.main-content-help {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.help-content {
+	padding: 11rem 11rem 0rem 32.8rem;
+	margin-right: auto;
+	height: 100%;
+}
+
+.help-header1 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 3.2rem;
+}
+.help-header1 a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	padding: 0.3rem;
+	border-radius: 100%;
+}
+
+.help-header1 a:hover {
+	background-color: var(--light-grey-placeholder);
+}
+
+.help-content h1 {
+	font-size: 6.1rem;
+}
+
+.pb-24 {
+	padding-bottom: 2.4rem;
+}
+
+.pb-16 {
+	padding-bottom: 1.6rem;
+}
+
+.help-content li {
+	font-weight: 700;
+	font-size: 2rem;
+	position: relative;
+	padding-left: 3rem;
+}
+
+.help-content ol li::marker {
+	font-size: 2.7rem;
+}
+
+.help-content li p {
+	font-size: 1.6rem;
+	font-weight: 400;
+}
+
+.help-content span {
+	color: var(--hover-blue);
+}
+
+@media screen and (max-width: 1460px) {
+	html {
+		font-size: 0.58em;
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	html {
+		font-size: 0.5em;
+	}
+}
+
+@media screen and (max-width: 780px) {
+	html {
+		font-size: 0.4715em;
+	}
+
+	.help-content {
+		padding: 11rem 1.6rem 0rem 1.6rem;
+		overflow-y: auto;
+	}
+}

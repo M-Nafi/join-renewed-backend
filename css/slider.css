@@ -1,0 +1,62 @@
+.slider-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 997;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	animation: 300ms ease-out 0s fadeOut forwards;
+}
+
+.pos-fixed {
+	position: fixed;
+}
+
+.slide-in {
+	animation: 300ms ease-out 0s slideIn forwards;
+}
+
+.slide-out {
+	animation: 300ms ease-out 0s slideOut forwards;
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(+500rem);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideOut {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(+500rem);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		background-color: rgba(0, 0, 0, 0);
+	}
+	to {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	to {
+		background-color: rgba(0, 0, 0, 0);
+	}
+}

@@ -1,0 +1,329 @@
+.mbl-move-btn-container {
+	display: none;
+	position: relative;
+}
+
+@media screen and (max-width: 1460px) {
+	html {
+		font-size: 0.58em;
+	}
+
+	#board_content {
+		gap: 0.4rem;
+	}
+
+	.board-container {
+		padding-left: 1.6rem;
+		max-width: 111.8rem;
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	html {
+		font-size: 0.5em;
+	}
+
+	.board-container {
+		padding-left: 1.6rem;
+		max-width: 96rem;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	html {
+		font-size: 0.425em;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	html {
+		font-size: 0.4em;
+	}
+}
+
+@media screen and (max-height: 700px) {
+	.privacy-sidebar {
+		padding: 1.5rem 0rem 0rem 0rem;
+	}
+}
+
+@media screen and (max-width: 780px) {
+	html {
+		font-size: 0.4715em;
+	}
+
+	.mobile-body::-webkit-scrollbar {
+		display: none;
+	}
+
+	#board_content {
+		flex-direction: column;
+	}
+
+	.board-container {
+		width: 100%;
+		height: calc(100vh - 4.477rem - 4.608rem - 15.707rem);
+		display: flex;
+		margin-left: 0;
+		margin-top: 0;
+		flex: 1;
+		flex-direction: column;
+		padding: 0rem 1.6rem;
+		overflow-y: auto;
+		touch-action: pan-y;
+	}
+	.board-head {
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr 1fr;
+		padding: 4.8rem 0 4rem 0;
+		grid-column-gap: 0rem;
+		grid-row-gap: 4rem;
+	}
+
+	#search_on_task_container {
+		display: flex;
+		flex-direction: column;
+		grid-column: 1/4;
+		grid-row: 2;
+	}
+
+	#input_section {
+		width: auto;
+	}
+
+	.mobile-d-none {
+		display: none;
+	}
+
+	#add_task_button {
+		width: auto;
+	}
+
+	.column-section {
+		width: auto;
+	}
+
+	.task-card {
+		max-width: 33.41rem;
+		min-width: 27rem;
+	}
+
+	.column-title-area {
+		margin-top: 2.6rem;
+	}
+
+	.column-drop-zone::-webkit-scrollbar {
+		display: none;
+	}
+
+	.column-drop-zone {
+		margin-top: 1.6rem;
+		gap: 0rem;
+		min-height: 0;
+		min-width: 100%;
+		overflow-x: auto;
+		touch-action: pan-x;
+		align-items: flex-start;
+		flex-direction: row;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.task-overlay-frame-open {
+		padding: 4.25rem 2.13rem;
+		gap: 2rem;
+	}
+
+	.title-task-overlay-open {
+		font-size: 5.4rem;
+	}
+
+	.slider-frame {
+		width: 52.5rem;
+		display: flex;
+		flex-direction: column;
+		padding: 4.25rem 2.13rem;
+		height: auto;
+	}
+
+	.add-task-container {
+		display: block;
+		margin-top: 2.4rem;
+	}
+
+	.add-task-head h1 {
+		font-size: 5.4rem;
+	}
+
+	.left-side-slider {
+		width: 100%;
+	}
+
+	.description-textarea {
+		max-width: 100%;
+		min-width: auto;
+	}
+
+	.subhead-container-ed-task {
+		width: 100%;
+	}
+
+	.assigned-to-input-slider {
+		width: 100%;
+	}
+
+	.assigned-to-slider {
+		width: 100%;
+	}
+
+	.separator {
+		display: none;
+	}
+
+	.right-side-slider {
+		width: 100%;
+		margin-right: 0rem;
+	}
+
+	.category-container {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	#select_category {
+		width: 100%;
+	}
+
+	.subtask-container-slider {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.subtask-input-container {
+		width: 100%;
+	}
+
+	.subtask-input-slider {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.subtask-list-item-slider {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.footer-subtask-slider {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+		margin-right: 0rem;
+		margin-top: 2rem;
+	}
+
+	#subtask_lists {
+		width: 100%;
+	}
+
+	.clear-create-subtask-btn {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		gap: 2.5rem;
+		margin-top: 1rem;
+	}
+
+	.subtask-edit-input-container {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.mbl-move-btn-container {
+		display: block;
+	}
+
+	.mbl-move-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.6rem;
+		font-weight: 600;
+		height: 4rem;
+		width: 8.5rem;
+		padding: 0rem 1.5rem;
+		background-color: var(--primary-dark-blue);
+		color: white;
+		border-radius: 1rem;
+		border: 0.1rem solid var(--primary-dark-blue);
+		cursor: pointer;
+	}
+
+	.mbl-move-btn:hover {
+		background-color: var(--hover-blue);
+		border: 0.1rem solid var(--hover-blue);
+		box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.25);
+	}
+
+	.mbl-move-menu {
+		display: inline-flex;
+		position: absolute;
+		right: -0.2rem;
+		z-index: 996;
+		padding: 1rem;
+		font-size: 1.6rem;
+		flex-direction: column;
+		align-items: flex-start;
+		border-radius: 2rem 0rem 2rem 2rem;
+		color: white;
+		background-color: var(--primary-dark-blue);
+		box-shadow: 0rem 0.4rem 0.4rem 0rem rgba(0, 0, 0, 0.25);
+	}
+
+	.mbl-move-item {
+		display: inline-flex;
+		padding: 0.8rem 0rem;
+		width: 16rem;
+		justify-content: center;
+		align-self: stretch;
+		border-radius: 0.8rem;
+	}
+	.mbl-move-item:hover {
+		background-color: rgb(42, 61, 89);
+	}
+
+	.task-card:active {
+		transform: none;
+	}
+
+	.task-card:hover {
+		border: 0.2rem solid var(--hover-blue);
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.add-task-container {
+		margin-top: 2rem;
+		overflow-y: auto;
+	}
+
+	.slider-frame {
+		max-width: 42.5rem;
+		max-height: 68rem;
+	}
+
+	.prio-buttons-container button {
+		padding: 1.6rem 1rem;
+	}
+
+	.task-overlay-frame-open {
+		width: 42.5rem;
+		max-height: calc(100vh - 15rem);
+	}
+	.overlay-scroll {
+		overflow-y: auto;
+		width: 100%;
+	}
+}

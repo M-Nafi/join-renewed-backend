@@ -1,0 +1,22 @@
+.legal-notice-content{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100%;
+}
+
+.impressum{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-right: 9.6rem;
+    padding-top: 9.6rem;
+    padding-left: calc(9.6rem + var(--sidebar-width));
+    padding-top: 9.6rem;
+}
+
+@media(max-width: 730px){
+    .impressum{
+        padding: 3rem!important;
+    }
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join</title>
+
+    <link rel="icon" type="image/svg" href="./assets/img/LogoFavicon.svg"/>    
+
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="./fonts.css"/>
+    <link rel="stylesheet" href="./css/add_task.css"/>
+    <link rel="stylesheet" href="./css/sidebar-header_template.css"/>
+    <link rel="stylesheet" href="./css/mobile-header-footer.css"/>
+    <link rel="stylesheet" href="./css/contacts.css"/>
+    <link rel="stylesheet" href="./css/contacts-overlay.css"/>
+    <link rel="stylesheet" href="./css/contacts-mobile.css"/>
+
+    <script src="./js/contacts_generate_html.js"></script>
+    <script src="./js/storage.js"></script>
+    <script src="./script.js"></script>
+    <script src="./js/sidebar-header.js"></script>
+    <script src="./js/add_task.js"></script>
+    <script src="html.js"></script>
+    <script src="./js/contacts.js"></script>
+    <script src="./js/contacts_overlay_and_mobile.js"></script>
+    <script src="./js/board.js"></script>
+    <script src="./js/render-board.js"></script>
+  </head>
+
+  <body onload="includeHTML(), initContacts()">
+    <div class="w3include-container">
+      <div w3-include-html="assets/templates/sidebar_template.html"></div>
+      <main>
+        <div class="resp-position-fixed" w3-include-html="assets/templates/header_template.html"></div>
+        <div class="contacts-main">
+          <div id="add_new_contact_main" class="add-new-contact-main">
+            <div class="contact-list">
+              <div class="primary-contact" onclick="showOverlay()">Add new contact <img src="./assets/img/primary-contact-icon.svg"/>
+              </div>              
+              <div id="contact_container"></div>
+            </div>            
+          </div>
+          
+
+          <div id="contacts_container_right" class="contacts-container-right show-responsive-details">
+            <div class="contacts-better-container">
+              <div id="resp_arrow_back" class="resp-arrow-back d-none" onclick="closeResponsiveDetails()">
+                <img class="responsive-arrow-back" src="./assets/img/arrow-left-line.svg"></div>
+              <div class="contacts-letter">Contacts</div>
+              <div class="vector-line"></div>
+              <div class="better-team">Better with a team</div>
+              <div class="horizontal-vector-line d-none"></div>
+
+            </div>
+
+            <div id="show_contact_details" class="show-contact-details d-none" onclick="showContactDetails()">
+            </div>
+            <div id="contact_succesfully_created" class="contact-succesfully-created">Contact succesfully created</div>
+          </div>
+        </div>    
+
+        <form>
+          <div id="add_new_contact" class="overlay-add-contact d-none">
+            <div class="overlay-container-left"><img class="add-contact-overlay-icon" src="./assets/img/join-overlay-icon-white.svg"/>
+              <div class="overlay-letter-add-contact">Add contact
+                <div class="overlay-letters-better">Tasks are better with a team!
+                </div>
+                <div class="overlay-vectorline-horizontal"></div>
+              </div>
+            </div>
+
+            <div class="overlay-container-right">
+              <div class="overlay-close" id="cancel_overlay" onclick="cancelOverlay()">
+                <img class="oyerlay-close-img" id="overlay_close_img" src="./assets/img/cancel.svg" />                  
+              </div>
+              <div class="overlay-add-contact-container">
+                <div class="overlay-input-data"><input type="text" id="contact_Name" required placeholder="Name"/>
+                  <img class="overlay-contact-icons" src="./assets/img/overlay-person.svg"/>
+                </div>
+                <div class="overlay-input-data"><input type="email" id="contact_Email" required placeholder="Email"/>
+                  <img class="overlay-contact-icons" src="./assets/img/overlay-mail.svg"/>
+                </div>
+                <div class="overlay-input-data"><input type="tel" id="contact_Phone" required placeholder="Phone" pattern="[0-9]*" inputmode="numeric"/>
+                  <img class="overlay-contact-icons" src="./assets/img/overlay-call.svg"/>
+                </div>
+              </div>
+              <div class="cancel-and-create-container">
+                <div id="overlay_cancel_button" class="overlay-cancel-button" onclick="cancelOverlay()">Cancel
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                    <mask id="mask0_71720_5473" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="25">
+                      <rect y="0.96582" width="24" height="24" fill="#D9D9D9"/>
+                    </mask>
+                    <g mask="url(#mask0_71720_5473)">
+                      <path d="M11.9998 14.3659L7.0998 19.2659C6.91647 19.4492 6.68314 19.5409 6.3998 19.5409C6.11647 19.5409 5.88314 19.4492 5.6998 19.2659C5.51647 19.0825 5.4248 18.8492 5.4248 18.5659C5.4248 18.2825 5.51647 18.0492 5.6998 17.8659L10.5998 12.9659L5.6998 8.06587C5.51647 7.88254 5.4248 7.6492 5.4248 7.36587C5.4248 7.08254 5.51647 6.8492 5.6998 6.66587C5.88314 6.48254 6.11647 6.39087 6.3998 6.39087C6.68314 6.39087 6.91647 6.48254 7.0998 6.66587L11.9998 11.5659L16.8998 6.66587C17.0831 6.48254 17.3165 6.39087 17.5998 6.39087C17.8831 6.39087 18.1165 6.48254 18.2998 6.66587C18.4831 6.8492 18.5748 7.08254 18.5748 7.36587C18.5748 7.6492 18.4831 7.88254 18.2998 8.06587L13.3998 12.9659L18.2998 17.8659C18.4831 18.0492 18.5748 18.2825 18.5748 18.5659C18.5748 18.8492 18.4831 19.0825 18.2998 19.2659C18.1165 19.4492 17.8831 19.5409 17.5998 19.5409C17.3165 19.5409 17.0831 19.4492 16.8998 19.2659L11.9998 14.3659Z"
+                        fill="#2A3647"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <button id="overlay_create_contact_button" class="overlay-create-contact-button" onclick="addNewContact(event)">Create contact
+
+                  <img src="./assets/img/overlay-ok.svg" />
+                </button>
+              </div>
+              <div id="overlay_contact_circle" class="overlay-contact-circle">
+                <img id="contact_gray" class="contact-gray" src="./assets/img/contacts-circle-grey.svg"/>
+                <img id="contact_person_white" class="contact-person-white" src="./assets/img/person-white.svg"/>
+
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+        <div id="handle_resp_contact_container" class="handle-resp-contact-container">            
+            <img id="handle_resp_contact_icon" class="resp-contact-icon" src="./assets/img/primary-contact-icon.svg" onclick="showOverlay()"/>          
+        </div>       
+
+
+        </div>
+      </div>
+
+      <div class="resp-footer" w3-include-html="assets/templates/mobile_sidebar_template.html">
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>
