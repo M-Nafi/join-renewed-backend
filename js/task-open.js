@@ -1,57 +1,25 @@
-// function loadTaskOpen(taskID) {
-//     let tasks = addedTasks.filter((t) => t["id"] === taskID);
-//     document.getElementById("task_overlay_bg").innerHTML = "";
-//     for (let index = 0; index < tasks.length; index++) {
-//         let task = tasks[index];
-//         let title = task["title"];
-//         let description = task["description"];
-//         let prio = task["prio"];
-//         let duedate = formatDueDate(task["duedate"]);
-//         let category = task["category"];
-//         let subtasks = task["subtask"];
-//         let assigneds = task["assigned"];
-//         showFrame("task_overlay_bg");
-//         addOverlayBg("task_overlay_bg");
-//         loadTask(taskID, title, description, prio, category, subtasks, assigneds, duedate);
-//         frameSlideIn("task_open_overlay_frame");
-//     }
-// }
-
 function loadTaskOpen(taskID) {
-    let tasks = addedTasks.filter((t) => t["id"] === taskID);
-    // console.log("Gefilterte Tasks:", tasks); // Überprüfe die Struktur
+    let tasks = addedTasks.filter((t) => t.id === taskID);
     document.getElementById("task_overlay_bg").innerHTML = "";
-    for (let index = 0; index < tasks.length; index++) {
-        let task = tasks[index];
-        let title = task["title"];
-        let description = task["description"];
-        let prio = task["prio"];
-        let duedate = formatDueDate(task["duedate"]);
-        let category = task["category"];
-        let subtasks = task["subtask"];
-        let assigneds = task["assigned"]; 
+    tasks.forEach(task => {
+        let { title, description, priority, category, subtask, assigneds, dueDate } = task;
         showFrame("task_overlay_bg");
         addOverlayBg("task_overlay_bg");
-        loadTask(taskID, title, description, prio, category, subtasks, assigneds, duedate);
+        loadTask(taskID, title, description, priority, category, subtask, assigneds, dueDate);
         frameSlideIn("task_open_overlay_frame");
-    }
+    });
 }
-
 
 function renderOpenTask(taskID) {
-    let tasks = addedTasks.filter((t) => t["id"] === taskID);
+    let tasks = addedTasks.filter((t) => t.id === taskID);
     document.getElementById("task_overlay_bg").innerHTML = "";
-    for (let index = 0; index < tasks.length; index++) {
-        let [taskID, bucket, title, description, prio, category, subtasks, assigneds, duedate] = getTaskVariables(
-            tasks,
-            index
-        );
-
-        loadTask(taskID, title, description, prio, category, subtasks, assigneds, duedate);
-    }
+    tasks.forEach(task => {
+        let { id, title, description, priority, category, subtask, assigneds, dueDate } = task;
+        loadTask(id, title, description, priority, category, subtask, assigneds, dueDate);
+    });
 }
 
-function loadTask(taskID, title, description, prio, category, subtasks, assigneds, duedate) {
+function loadTask(taskID, title, description, priority, category, subtask, assigneds, dueDate) {
     let categoryColor = loadCategoryColor(category);
     document.getElementById("task_overlay_bg").innerHTML = generateOpenTaskHTML(
         taskID,
@@ -59,11 +27,11 @@ function loadTask(taskID, title, description, prio, category, subtasks, assigned
         description,
         category,
         categoryColor,
-        duedate
+        formatDueDate(dueDate)
     );
-    loadTaskOpenPrio(prio, "task_open_prio");
+    loadTaskOpenPrio(priority, "task_open_prio");
     loadAssignedsOpenTask(assigneds, taskID);
-    loadSubtasks(subtasks, "task_overlay_subtasks_container", taskID);
+    loadSubtasks(subtask, "task_overlay_subtasks_container", taskID);
 }
 
 function loadTaskOpenPrio(prio, taskID) {
@@ -77,51 +45,28 @@ function loadTaskOpenPrio(prio, taskID) {
     }
 }
 
-// function loadAssignedsOpenTask(assigneds, taskID) {
-//     let assigned = document.getElementById("assigned_to_contacts_task_open");
-//     assigned.innerHTML = "";
-//     for (let i = 0; i < assigneds.length; i++) {
-//         let badgeColor = getUserColor(assigneds, i);
-//         let assignedUserName = assigneds[i];
-//         let userBadge = generateUserBadge(assignedUserName);
-//         assigned.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assignedUserName, taskID);
-//     }
-// }
-
 function loadAssignedsOpenTask(assigneds, taskID) {
+    let assigned = document.getElementById("assigned_to_contacts_task_open");
     if (assigneds && assigneds.length > 0) {
-        let assigned = document.getElementById("assigned_to_contacts_task_open");
         assigned.innerHTML = "";
-
-        for (let i = 0; i < assigneds.length; i++) {
-            let badgeColor = getUserColor(assigneds, i);
-            let assignedUserName = assigneds[i];
+        assigneds.forEach(assignedUserName => {
+            let badgeColor = getUserColor(assigneds, assignedUserName);
             let userBadge = generateUserBadge(assignedUserName);
             assigned.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assignedUserName, taskID);
-        }
+        });
     } else {
-        let assigned = document.getElementById("assigned_to_contacts_task_open");
         assigned.innerHTML = "<p>Keine Zuweisungen vorhanden</p>";
     }
 }
-
-
-
-
-
-
-
 
 function loadSubtasks(subtasks, elementID, taskID) {
     let subtasksContainer = document.getElementById(elementID);
     subtasksContainer.innerHTML = "";
     if (subtasks.length > 0) {
-        for (let i = 0; i < subtasks.length; i++) {
-            let subtask = subtasks[i];
-            let subdone = subtask["subdone"];
-            let subtitle = subtask["subtitle"];
-            subtasksContainer.innerHTML += checkSubtask(subdone, subtitle, i, taskID);
-        }
+        subtasks.forEach((subtask, i) => {
+            let { subdone, title } = subtask;
+            subtasksContainer.innerHTML += checkSubtask(subdone, title, i, taskID);
+        });
     } else {
         clearElement("label_task_open_subtask");
     }
@@ -142,17 +87,13 @@ function clearElement(id) {
 function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
     let checkSubtask = document.getElementById(elementID);
     let subtask = addedTasks[taskID].subtask[subtaskNumber];
-    if (checkSubtask.checked) {
-        subtask["subdone"] = true;
-    } else if (!checkSubtask.checked) {
-        subtask["subdone"] = false;
+    subtask.subdone = checkSubtask.checked;
+}
+
+function getUserColor(assigneds, assignedName) {
+    let filteredUser = users.filter((user) => user.name === assignedName);
+    if (filteredUser.length > 0) {
+        return filteredUser[0].bgcolor;
     }
 }
 
-function getUserColor(assigneds, index) {
-    let assignedName = assigneds[index];
-    let filteredUser = users.filter((t) => t["name"] === assignedName);
-    if (filteredUser.length > 0) {
-        return filteredUser[0]["bgcolor"];
-    }
-}

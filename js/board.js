@@ -24,15 +24,17 @@ async function loadAddedTasksFromStorage() {
                 id: task.id,
                 title: task.title,
                 description: task.description,
-                dueDate: task.dueDate,
-                priority: task.priority,
-                category: task.category,
-                subtask: task.subtask,
                 assigneds: task.assigneds || [],
-                bucket: "to-do",
+                dueDate: task.dueDate,
+                priority: task.priority || "Medium",
+                category: task.category,
+                subtask: (task.subtask || []).map(sub => ({
+                    title: sub.title || sub, 
+                    subdone: sub.subdone !== undefined ? sub.subdone : false 
+                })),
+                bucket: task.bucket,  
             }));
-            console.log("Tasks erfolgreich geladen:", addedTasks); // Log für erfolgreich geladene Tasks
-            loadBoard();  // Board mit den neuen Tasks laden
+            loadBoard(); 
         } else {
             console.error("Fehler beim Laden der Tasks: Response nicht ok");
         }
@@ -52,10 +54,11 @@ function loadBoard() {
 function updateBoard(currentBucket) {
     let tasks = getTasksPerBucket(currentBucket);
     for (let index = 0; index < tasks.length; index++) {
-        let [id, bucket, title, description, prio, category, subtasks, assigneds, duedate, rawDuedate] = getTaskVariables(tasks, index);
-        loadCard(id, bucket, title, description, prio, category, subtasks, assigneds);
+        let [id, bucket, title, description, priority, category, subtasks, assigneds, dueDate, rawDuedate] = getTaskVariables(tasks, index);
+        loadCard(id, bucket, title, description, priority, category, subtasks, assigneds);
     }
 }
+
 
 function getTasksPerBucket(currentBucket) {
     let tasks = [];
@@ -74,23 +77,28 @@ function getTaskVariables(tasks, index) {
     let bucket = task["bucket"];
     let title = task["title"];
     let description = task["description"];
-    let prio = task["prio"];
+    let priority = task["priority"]; 
     let category = task["category"];
-    let subtasks = task["subtask"];
-    let assigneds = task["assigned"];
-    let duedate = formatDueDate(task["duedate"]);
-    let rawDuedate = task["duedate"];
-    return [id, bucket, title, description, prio, category, subtasks, assigneds, duedate, rawDuedate];
+    let subtasks = task["subtask"]; 
+    let assigneds = task["assigneds"]; 
+    let duedate = formatDueDate(task["dueDate"]); 
+    let rawDuedate = task["dueDate"]; 
+    return [id, bucket, title, description, priority, category, subtasks, assigneds, duedate, rawDuedate];
 }
 
-function loadCard(id, bucket, title, description, prio, category, subtasks, assigneds) {
+
+
+function loadCard(id, bucket, title, description, priority, category, subtasks, assigneds) {
+    
     let categoryColor = loadCategoryColor(category);
     document.getElementById(bucket).innerHTML += generateCardHTML(id, title, description, category, categoryColor);
-    loadSubtaskProgressBar(subtasks, id);
-
+    loadSubtaskProgressBar(subtasks, id); 
     addAssignedsBadgesToCard(assigneds, id);
-    loadCardPrioIcon(prio, id);
+    loadCardPriorityIcon(priority, id);
 }
+
+
+
 
 function loadNoTasksLabel(bucket) {
     let taskColumn = document.getElementById(bucket);
@@ -105,11 +113,12 @@ function loadSubtaskProgressBar(subtasks, id) {
     let done = loadSubtaskAreDone(subtasks);
     if (allSubtask > 0) {
         document.getElementById(`subtasks_container_${id}`).innerHTML = generateSubtaskProgressHTML(allSubtask, done);
+    } else {
+        document.getElementById(`subtasks_container_${id}`).innerHTML = "Keine Subtasks";
     }
 }
 
 function addAssignedsBadgesToCard(assigneds, id) {
-    // Sicherstellen, dass assigneds ein Array ist und mindestens ein Kontakt vorhanden ist
     if (Array.isArray(assigneds) && assigneds.length > 0) {
         for (let i = 0; i < assigneds.length; i++) {
             let [badgeColor, userBadge, assignedLimit, addLimit] = getVariableForAssignedsUserBadge(assigneds, i);
@@ -142,27 +151,29 @@ function renderAssignedBadgeWithLimit(id, assigneds) {
     document.getElementById(`task_assignment_container_${id}`).innerHTML += `<div class="assigned-limit">+${limit}</div>`;
 }
 
-function loadCardPrioIcon(prio, id) {
+function loadCardPriorityIcon(priority, id) { // Name angepasst
     let taskPrioIcon = document.getElementById(`task_prio_img_${id}`);
-    if (prio === "Urgent") {
+    if (priority === "Urgent") {
         taskPrioIcon.innerHTML = generateUrgentPrioIcon();
-    } else if (prio === "Medium") {
+    } else if (priority === "Medium") {
         taskPrioIcon.innerHTML = generateMediumPrioIcon();
-    } else if (prio === "Low") {
+    } else if (priority === "Low") {
         taskPrioIcon.innerHTML = generateLowPrioIcon();
     }
 }
 
+
 function loadSubtaskAreDone(subtasks) {
     let doneSubtask = 0;
-    for (let i = 0; i < subtasks.length; i++) {
-        let subtask = subtasks[i];
-        if (subtask.subdone) {
+    subtasks.forEach(subtask => {
+        if (subtask.subdone) { // Erledigte Subtasks zählen
             doneSubtask++;
         }
-    }
+    });
     return doneSubtask;
 }
+
+
 
 function loadCategoryColor(category) {
     if (category === "Technical Task") {
@@ -232,11 +243,12 @@ function formatNoTaskLabelString(str) {
 function formatDueDate(dueDate) {
     if (dueDate && typeof dueDate === 'string' && dueDate.includes("-")) {
         let dateParts = dueDate.split("-");
-        let formattedDate = dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
+        let formattedDate = dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0]; 
         return formattedDate;
     }
-    return dueDate;  // Gibt den Originalwert zurück, wenn dueDate ungültig oder kein "-" enthält
+    return dueDate; 
 }
+
 
 async function clearRemoteStorage() {
     users = [];

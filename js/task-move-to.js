@@ -6,52 +6,54 @@ document.addEventListener("DOMContentLoaded", function () {
             //searchTask();
         }
     });
-    // window.addEventListener("resize", updateHeight);
 });
 
-/**
- * Saves the current task ID
- * @param {int} id - ID from the drag elements
- */
 function startDragging(id) {
-    currentDraggedElement = id;
+    console.log(`Dragging gestartet: ${id}`);
+    currentDraggedElement = id; // ID des Elements speichern
 }
 
-/**
- * Handles the "dragover" event, allowing the dropping of dragged elements.
- *
- * @param {Event} ev - The "dragover" event object.
- * @returns {void} - No return value.
- *
- * @description
- * This function prevents the default behavior of the dragover event, allowing the dropping of dragged elements.
- */
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
-/**
- * The position of the column is changed in the array and the board is reloaded
- * @param {String} bucket - HTML Id from the drop zone
- */
 async function moveTo(bucket) {
-    addedTasks[currentDraggedElement]["bucket"] = bucket;
-    loadBoard();
-    await setItem("addedTasks", JSON.stringify(addedTasks));
+    if (!currentDraggedElement) {
+        console.error('Kein gültiges Element zum Verschieben gefunden.');
+        return;
+    }
+
+    try {
+        // PATCH-Request zum Backend senden
+        const response = await fetch(`http://localhost:8000/api/tasks/${currentDraggedElement}/update/`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bucket })  // Task mit neuem "bucket" speichern
+        });
+
+        if (!response.ok) {
+            console.error('Fehler beim Aktualisieren:', response.status, response.statusText);
+            return;
+        }
+
+        console.log(`Task ${currentDraggedElement} erfolgreich verschoben nach ${bucket}`);
+
+        // Nach dem Update das Board mit den neuesten Daten neu laden
+        await loadAddedTasksFromStorage();  // Lädt die neuesten Tasks
+        loadBoard();  // Board aktualisieren
+
+    } catch (error) {
+        console.error('Fehler beim Verschieben:', error);
+    }
 }
 
-/**
- * The target dropzone is highlighted when draging
- * @param {int} id - ID from the drag elements
- */
+
+
 function highlight(id) {
     document.getElementById(id).classList.add("drag-area-highlight");
 }
 
-/**
- * The target dropzone remove highlighted when element ist drop
- * @param {int} id - ID from the drag elements
- */
 function removeHighlight(id) {
     document.getElementById(id).classList.remove("drag-area-highlight");
 }
+
