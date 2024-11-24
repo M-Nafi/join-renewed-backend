@@ -163,7 +163,7 @@ function loadCardPriorityIcon(priority, id) { // Name angepasst
 function loadSubtaskAreDone(subtasks) {
     let doneSubtask = 0;
     subtasks.forEach(subtask => {
-        if (subtask.subdone) { // Erledigte Subtasks zählen
+        if (subtask.subdone) { 
             doneSubtask++;
         }
     });

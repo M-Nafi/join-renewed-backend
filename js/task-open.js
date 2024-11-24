@@ -95,17 +95,13 @@ function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
 function getUserColor(assignedNames) {
     console.log(assignedNames);
     for (const assignedName of assignedNames) {
-        // Gehe sicher, dass du den Namen als String verwendest
-        const name = assignedName.name;  // Hole den Namen aus dem Objekt
+        const name = assignedName.name;  
         const user = contactsData.find(contact => contact.name.toLowerCase() === name.toLowerCase());
         if (user) {
-            return user.bgcolor; // Farbe des ersten passenden Benutzers zurückgeben
+            return user.bgcolor; 
         }
     }
 }
-
-
-
 
 // // eingeloggter user...
 // function getUserColor(assigned, assignedName, id) {

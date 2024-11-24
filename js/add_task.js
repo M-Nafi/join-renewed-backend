@@ -268,7 +268,7 @@ async function createTask() {
     id: setNewTask,
     title: document.getElementById("enter_title_field").value,
     description: document.getElementById("enter_description_field").value,
-    assigned: assignedContacts,  // Hier speichern wir die IDs und Farben der zugewiesenen Kontakte
+    assigned: assignedContacts,  
     dueDate: document.getElementById("date_field").value,
     priority: selectedPriority,
     category: document.getElementById("select_category_field").value,
