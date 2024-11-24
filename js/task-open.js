@@ -60,8 +60,6 @@ function loadAssignedsOpenTask(assigneds, taskID) {
     }
 }
 
-
-
 function loadSubtasks(subtasks, elementID, taskID) {
     let subtasksContainer = document.getElementById(elementID);
     subtasksContainer.innerHTML = "";
@@ -89,8 +87,15 @@ function clearElement(id) {
 
 function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
     let checkSubtask = document.getElementById(elementID);
-    let subtask = addedTasks[taskID].subtask[subtaskNumber];
-    subtask.subdone = checkSubtask.checked;
+    let task = addedTasks.find((task) => task.id === taskID);
+
+    if (task) {
+        let subtask = task.subtask[subtaskNumber];
+        subtask.subdone = checkSubtask.checked;
+        let done = task.subtask.filter(sub => sub.subdone).length;
+        let allSubtasks = task.subtask.length;
+        document.getElementById(`subtasks_container_${taskID}`).innerHTML = generateSubtaskProgressHTML(allSubtasks, done);
+    }
 }
 
 function getUserColors(assignedNames) {

@@ -60,16 +60,16 @@ function showAwaitingFeedback() {
 function showUrgentTask() {
     let urgent = document.getElementById('sm_urgent');
     let dateDiv = document.getElementById('sm_duedate');
-    let task = addedTasks.filter(task => task.prio === 'Urgent');
+    let task = addedTasks.filter(task => task.priority === 'Urgent');
     if (task.length === 0) {
         urgent.innerHTML = 0;
     } else {
         let sortedTask = task.sort((a, b) => {
-            const dateA = new Date(a.duedate);
-            const dateB = new Date(b.duedate);
+            const dateA = new Date(a.dueDate);
+            const dateB = new Date(b.dueDate);
             return dateA - dateB;
         });
-        let date = new Date(sortedTask[0].duedate);
+        let date = new Date(sortedTask[0].dueDate);
         date = formatCustomDate(date);
         dateDiv.innerHTML = date;
         urgent.innerHTML = task.length;
