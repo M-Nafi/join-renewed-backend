@@ -50,15 +50,16 @@ function loadAssignedsOpenTask(assigneds, taskID) {
     assignedElement.innerHTML = ""; // Vorherige Inhalte löschen
 
     if (assigneds && assigneds.length > 0) {
-        assigneds.forEach(assignedName => {
-            const badgeColor = getUserColor(assignedName);
-            const userBadge = generateUserBadge(assignedName); // Initialen generieren
-            assignedElement.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assignedName, taskID);
+        assigneds.forEach(assigned => {
+            const badgeColor = getUserColors([assigned])[0]; // Hole die Farbe für den einzelnen Kontakt
+            const userBadge = generateUserBadge(assigned); // Initialen generieren
+            assignedElement.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assigned.name, taskID);
         });
     } else {
         assignedElement.innerHTML = "<p>Keine Zuweisungen vorhanden</p>";
     }
 }
+
 
 
 function loadSubtasks(subtasks, elementID, taskID) {
@@ -92,16 +93,14 @@ function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
     subtask.subdone = checkSubtask.checked;
 }
 
-function getUserColor(assignedNames) {
-    console.log(assignedNames);
-    for (const assignedName of assignedNames) {
+function getUserColors(assignedNames) {
+    return assignedNames.map(assignedName => {
         const name = assignedName.name;  
         const user = contactsData.find(contact => contact.name.toLowerCase() === name.toLowerCase());
-        if (user) {
-            return user.bgcolor; 
-        }
-    }
+        return user ? user.bgcolor : "#000000"; // Standardfarbe falls kein Treffer
+    });
 }
+
 
 // // eingeloggter user...
 // function getUserColor(assigned, assignedName, id) {

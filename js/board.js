@@ -4,8 +4,8 @@ let filteredTasks = [];
 
 
 async function initBoard() {
-    await loadAddedTasksFromStorage();
     await loadDatabaseContacts();
+    await loadAddedTasksFromStorage();
     loadBoard();
     loadCurrentUser();
     loadUserBadge();
@@ -131,13 +131,14 @@ function addAssignedsBadgesToCard(assigneds, id) {
 }
 
 function getVariableForAssignedsUserBadge(assigneds, i) {
-    let badgeColor = getUserColor(assigneds, i);
-    let assignedUserName = assigneds[i];
-    let userBadge = generateUserBadge(assignedUserName);
-    let assignedLimit = assigneds.length - 1;
-    let addLimit = 5;
+    const badgeColor = getUserColors([assigneds[i]])[0]; 
+    const assignedUserName = assigneds[i];
+    const userBadge = generateUserBadge(assignedUserName);
+    const assignedLimit = assigneds.length - 1;
+    const addLimit = 5;
     return [badgeColor, userBadge, assignedLimit, addLimit];
 }
+
 
 function renderAssignedBadge(userBadge, badgeColor, id) {
     document.getElementById(`task_assignment_container_${id}`).innerHTML += generateAssignedBadgeHTML(userBadge, badgeColor);
@@ -148,7 +149,7 @@ function renderAssignedBadgeWithLimit(id, assigneds) {
         document.getElementById(`task_assignment_container_${id}`).innerHTML += `<div class="assigned-limit">+${limit}</div>`;
 }
 
-function loadCardPriorityIcon(priority, id) { // Name angepasst
+function loadCardPriorityIcon(priority, id) { 
     let taskPrioIcon = document.getElementById(`task_prio_img_${id}`);
     if (priority === "Urgent") {
         taskPrioIcon.innerHTML = generateUrgentPrioIcon();
