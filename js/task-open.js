@@ -46,18 +46,20 @@ function loadTaskOpenPrio(prio, taskID) {
 }
 
 function loadAssignedsOpenTask(assigneds, taskID) {
-    let assigned = document.getElementById("assigned_to_contacts_task_open");
+    const assignedElement = document.getElementById("assigned_to_contacts_task_open");
+    assignedElement.innerHTML = ""; // Vorherige Inhalte löschen
+
     if (assigneds && assigneds.length > 0) {
-        assigned.innerHTML = "";
-        assigneds.forEach(assignedUserName => {
-            let badgeColor = getUserColor(assigneds, assignedUserName);
-            let userBadge = generateUserBadge(assignedUserName);
-            assigned.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assignedUserName, taskID);
+        assigneds.forEach(assignedName => {
+            const badgeColor = getUserColor(assignedName);
+            const userBadge = generateUserBadge(assignedName); // Initialen generieren
+            assignedElement.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assignedName, taskID);
         });
     } else {
-        assigned.innerHTML = "<p>Keine Zuweisungen vorhanden</p>";
+        assignedElement.innerHTML = "<p>Keine Zuweisungen vorhanden</p>";
     }
 }
+
 
 function loadSubtasks(subtasks, elementID, taskID) {
     let subtasksContainer = document.getElementById(elementID);
@@ -90,10 +92,25 @@ function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
     subtask.subdone = checkSubtask.checked;
 }
 
-function getUserColor(assigneds, assignedName) {
-    let filteredUser = users.filter((user) => user.name === assignedName);
-    if (filteredUser.length > 0) {
-        return filteredUser[0].bgcolor;
+function getUserColor(assignedNames) {
+    console.log(assignedNames);
+    for (const assignedName of assignedNames) {
+        // Gehe sicher, dass du den Namen als String verwendest
+        const name = assignedName.name;  // Hole den Namen aus dem Objekt
+        const user = contactsData.find(contact => contact.name.toLowerCase() === name.toLowerCase());
+        if (user) {
+            return user.bgcolor; // Farbe des ersten passenden Benutzers zurückgeben
+        }
     }
 }
 
+
+
+
+// // eingeloggter user...
+// function getUserColor(assigned, assignedName, id) {
+//     let filteredUser = users.filter((user) => user.name === assignedName);
+//     if (filteredUser.length > 0) {                             
+//         return filteredUser[0].bgcolor;
+//     }
+// }

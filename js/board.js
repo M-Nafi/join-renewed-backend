@@ -2,9 +2,10 @@ let addedTasks = [];
 let storageTasks = [];
 let filteredTasks = [];
 
+
 async function initBoard() {
     await loadAddedTasksFromStorage();
-    // await loadUsers();
+    await loadDatabaseContacts();
     loadBoard();
     loadCurrentUser();
     loadUserBadge();
@@ -24,15 +25,15 @@ async function loadAddedTasksFromStorage() {
                 id: task.id,
                 title: task.title,
                 description: task.description,
-                assigneds: task.assigneds || [],
+                assigned: task.assigned || [],
                 dueDate: task.dueDate,
                 priority: task.priority || "Medium",
                 category: task.category,
                 subtask: (task.subtask || []).map(sub => ({
-                    title: sub.title || sub, 
+                    title: sub.title || sub,
                     subdone: sub.subdone !== undefined ? sub.subdone : false 
                 })),
-                bucket: task.bucket,  
+                bucket: task.bucket,
             }));
             loadBoard(); 
         } else {
@@ -80,7 +81,7 @@ function getTaskVariables(tasks, index) {
     let priority = task["priority"]; 
     let category = task["category"];
     let subtasks = task["subtask"]; 
-    let assigneds = task["assigneds"]; 
+    let assigneds = task["assigned"]; 
     let duedate = formatDueDate(task["dueDate"]); 
     let rawDuedate = task["dueDate"]; 
     return [id, bucket, title, description, priority, category, subtasks, assigneds, duedate, rawDuedate];
@@ -89,16 +90,12 @@ function getTaskVariables(tasks, index) {
 
 
 function loadCard(id, bucket, title, description, priority, category, subtasks, assigneds) {
-    
     let categoryColor = loadCategoryColor(category);
     document.getElementById(bucket).innerHTML += generateCardHTML(id, title, description, category, categoryColor);
     loadSubtaskProgressBar(subtasks, id); 
     addAssignedsBadgesToCard(assigneds, id);
     loadCardPriorityIcon(priority, id);
 }
-
-
-
 
 function loadNoTasksLabel(bucket) {
     let taskColumn = document.getElementById(bucket);
@@ -148,7 +145,7 @@ function renderAssignedBadge(userBadge, badgeColor, id) {
 
 function renderAssignedBadgeWithLimit(id, assigneds) {
     let limit = assigneds.length - 6;
-    document.getElementById(`task_assignment_container_${id}`).innerHTML += `<div class="assigned-limit">+${limit}</div>`;
+        document.getElementById(`task_assignment_container_${id}`).innerHTML += `<div class="assigned-limit">+${limit}</div>`;
 }
 
 function loadCardPriorityIcon(priority, id) { // Name angepasst

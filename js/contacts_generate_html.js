@@ -51,11 +51,11 @@ function getOverlayContactCircleHTML() {
  * @param {string} color - color for contact circle
  * @param {string} initials - initials of the contact
  */
-function generateOverlayContactCircle(color, initials) {
+function generateOverlayContactCircle(bgcolor, initials) {
   let overlayContactCircle = document.getElementById("overlay_contact_circle");
   overlayContactCircle.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 43 42" fill="none">
-          <circle cx="21.5" cy="21" r="20" fill="${color}" stroke="white" stroke-width="2"/>
+          <circle cx="21.5" cy="21" r="20" fill="${bgcolor}" stroke="white" stroke-width="2"/>
           <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="white">${initials}</text>
         </svg>
       `;

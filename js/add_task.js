@@ -16,7 +16,7 @@ async function loadAddedTasks() {
   try {
     addedTasks = JSON.parse(await getItem("addedTasks"));
   } catch (e) {
-    console.error("Loading Added Tasks error:", e);
+    // console.error("Loading Added Tasks error:", e);
   }
 }
 
@@ -32,7 +32,6 @@ function changePrioColor(prio) {
 }
 
 function settingPrioBackground(container, img, prio) {
-
   container.style.backgroundColor = "white";
   container.style.color = "#2a3647";
   img.src = "./assets/img/" + prio + ".svg";
@@ -257,15 +256,19 @@ function getSelectedPriority() {
 async function createTask() {
   const setNewTask = createNewTaskID();
   const selectedPriority = getSelectedPriority();
-  const selectedContacts = window.assigned;  // Verwende `window.assigned` direkt hier
-  
-  console.log('selectedContacts:', selectedContacts);  // Überprüfe den Wert von `assigned`
+  const selectedContacts = window.assigned;  
+
+  const assignedContacts = selectedContacts.map((contact) => ({
+    name: contact.name,
+    id: contact.id,
+    bgcolor: contact.bgcolor
+  }));
 
   const newTaskData = {
     id: setNewTask,
     title: document.getElementById("enter_title_field").value,
     description: document.getElementById("enter_description_field").value,
-    assigned: selectedContacts.map((contact) => contact.name),
+    assigned: assignedContacts,  // Hier speichern wir die IDs und Farben der zugewiesenen Kontakte
     dueDate: document.getElementById("date_field").value,
     priority: selectedPriority,
     category: document.getElementById("select_category_field").value,
@@ -283,17 +286,16 @@ async function createTask() {
 
     if (response.ok) {
       createTaskMessage();  
-      console.log('Assigned Contacts:', selectedContacts);
       setTimeout(() => {
         window.location.href = "board.html";
       }, 1000);
-    } else {
-      // console.error('Fehler beim Erstellen des Tasks:', response.statusText);
     }
   } catch (error) {
     console.error('Netzwerkfehler:', error);
   }
 }
+
+
 
 
 async function pushToJSON(setNewTask, selectedPriority) {

@@ -83,32 +83,6 @@ function showOverlay(isEdit) {
   document.getElementById('handle_resp_contact_container').classList.add('d-none');     
 }
 
-// ALTE funktion für das hinzufügen der kontakte OHNE backend
-// /**
-//  * this function is for adding a new contact
-//  * @param {event} event - event object
-//  */
-// async function addNewContact(event) {
-//   event.preventDefault();
-//   let newContact = {
-//     name: document.getElementById("contact_Name").value,
-//     email: document.getElementById("contact_Email").value,
-//     phone: document.getElementById("contact_Phone").value,
-//     bgcolor: getRandomColor(),
-//   };
-//   let index;
-//   if (currentUser >= 0) {
-//     index = findInsertIndex(newContact.name, users);
-//     users.splice(index, 0, newContact);
-//     await setItem("users", JSON.stringify(users));
-//   } else {
-//     index = findInsertIndex(newContact.name, contactsData);
-//     contactsData.splice(index, 0, newContact);
-//   }
-//   handleNewContact(index); 
-// }
-
-// NEUE funktion für das hinzufügen der kontakte ins backend
 
 async function addNewContact(event) {
   event.preventDefault();

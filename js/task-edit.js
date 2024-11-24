@@ -1,19 +1,3 @@
-let contactsData = []; // Kontakte initialisieren
-
-async function loadContacts() {
-    const response = await fetch('http://localhost:8000/api/contacts/');
-    if (response.ok) {
-        contactsData = await response.json();
-    } else {
-        console.error("Fehler beim Laden der Kontakte");
-    }
-}
-loadContacts();
-
-
-
-
-
 function loadTaskEdit(TaskID) {
 	let tasks = addedTasks.filter((t) => t["id"] === TaskID);
 	document.getElementById("task_overlay_bg").innerHTML = "";
