@@ -273,6 +273,7 @@ async function createTask() {
     priority: selectedPriority,
     category: document.getElementById("select_category_field").value,
     subtask: addedSubtasks.map((sub) => sub.subtitle), 
+    // assigneds: assignedContacts
   };
 
   try {

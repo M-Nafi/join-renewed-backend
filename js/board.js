@@ -2,7 +2,6 @@ let addedTasks = [];
 let storageTasks = [];
 let filteredTasks = [];
 
-
 async function initBoard() {
     await loadDatabaseContacts();
     await loadAddedTasksFromStorage();

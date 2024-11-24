@@ -1,25 +1,50 @@
-function loadTaskOpen(taskID) {
-    let tasks = addedTasks.filter((t) => t.id === taskID);
-    document.getElementById("task_overlay_bg").innerHTML = "";
-    tasks.forEach(task => {
-        let { title, description, priority, category, subtask, assigneds, dueDate } = task;
+async function fetchTaskDetails(taskID) {
+    try {
+        const response = await fetch(`http://localhost:8000/api/tasks/${taskID}/`);
+        if (response.ok) {
+            const task = await response.json();
+            return {
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                assigned: task.assigned || [],
+                dueDate: task.dueDate,
+                priority: task.priority || "Medium",
+                category: task.category,
+                subtask: (task.subtask || []).map(sub => ({
+                    title: sub.title || sub,
+                    subdone: sub.subdone !== undefined ? sub.subdone : false,
+                })),
+                bucket: task.bucket,
+            };
+        } else {
+            console.error("Fehler beim Abrufen der Task-Details:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Netzwerkfehler beim Laden der Task-Details:", error);
+    }
+    return null; // Falls ein Fehler auftritt
+}
+ 
+async function loadTaskOpen(taskID) {
+    const task = await fetchTaskDetails(taskID);
+    if (task) {
+        document.getElementById("task_overlay_bg").innerHTML = "";
         showFrame("task_overlay_bg");
         addOverlayBg("task_overlay_bg");
-        loadTask(taskID, title, description, priority, category, subtask, assigneds, dueDate);
+        renderOpenTask(task);
         frameSlideIn("task_open_overlay_frame");
-    });
+    } else {
+        console.error("Task konnte nicht geladen werden.");
+    }
 }
-
-function renderOpenTask(taskID) {
-    let tasks = addedTasks.filter((t) => t.id === taskID);
-    document.getElementById("task_overlay_bg").innerHTML = "";
-    tasks.forEach(task => {
-        let { id, title, description, priority, category, subtask, assigneds, dueDate } = task;
-        loadTask(id, title, description, priority, category, subtask, assigneds, dueDate);
-    });
+ 
+function renderOpenTask(task) {
+    let { id, title, description, priority, category, subtask, assigned, dueDate } = task;
+    loadTask(id, title, description, priority, category, subtask, assigned, dueDate);
 }
-
-function loadTask(taskID, title, description, priority, category, subtask, assigneds, dueDate) {
+ 
+function loadTask(taskID, title, description, priority, category, subtask, assigned, dueDate) {
     let categoryColor = loadCategoryColor(category);
     document.getElementById("task_overlay_bg").innerHTML = generateOpenTaskHTML(
         taskID,
@@ -30,10 +55,10 @@ function loadTask(taskID, title, description, priority, category, subtask, assig
         formatDueDate(dueDate)
     );
     loadTaskOpenPrio(priority, "task_open_prio");
-    loadAssignedsOpenTask(assigneds, taskID);
+    loadAssignedsOpenTask(assigned, taskID);
     loadSubtasks(subtask, "task_overlay_subtasks_container", taskID);
 }
-
+ 
 function loadTaskOpenPrio(prio, taskID) {
     let taskPrioIcon = document.getElementById(taskID);
     if (prio === "Urgent") {
@@ -44,11 +69,11 @@ function loadTaskOpenPrio(prio, taskID) {
         taskPrioIcon.innerHTML = `<div>${prio}</div> ${generateLowPrioIcon()}`;
     }
 }
-
+ 
 function loadAssignedsOpenTask(assigneds, taskID) {
     const assignedElement = document.getElementById("assigned_to_contacts_task_open");
     assignedElement.innerHTML = ""; // Vorherige Inhalte löschen
-
+ 
     if (assigneds && assigneds.length > 0) {
         assigneds.forEach(assigned => {
             const badgeColor = getUserColors([assigned])[0]; // Hole die Farbe für den einzelnen Kontakt
@@ -59,7 +84,7 @@ function loadAssignedsOpenTask(assigneds, taskID) {
         assignedElement.innerHTML = "<p>Keine Zuweisungen vorhanden</p>";
     }
 }
-
+ 
 function loadSubtasks(subtasks, elementID, taskID) {
     let subtasksContainer = document.getElementById(elementID);
     subtasksContainer.innerHTML = "";
@@ -72,7 +97,7 @@ function loadSubtasks(subtasks, elementID, taskID) {
         clearElement("label_task_open_subtask");
     }
 }
-
+ 
 function checkSubtask(subdone, subtitle, subtaskNumber, taskID) {
     if (subdone) {
         return generateSubtasksCheckedHTML(subtitle, subtaskNumber, taskID);
@@ -80,15 +105,15 @@ function checkSubtask(subdone, subtitle, subtaskNumber, taskID) {
         return generateSubtasksHTML(subtitle, subtaskNumber, taskID);
     }
 }
-
+ 
 function clearElement(id) {
     document.getElementById(id).innerHTML = "";
 }
-
+ 
 function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
     let checkSubtask = document.getElementById(elementID);
     let task = addedTasks.find((task) => task.id === taskID);
-
+ 
     if (task) {
         let subtask = task.subtask[subtaskNumber];
         subtask.subdone = checkSubtask.checked;
@@ -97,12 +122,12 @@ function changeSubtaskConfirmation(elementID, subtaskNumber, taskID) {
         document.getElementById(`subtasks_container_${taskID}`).innerHTML = generateSubtaskProgressHTML(allSubtasks, done);
     }
 }
-
+ 
 function getUserColors(assignedNames) {
     return assignedNames.map(assignedName => {
         const name = assignedName.name;  
         const user = contactsData.find(contact => contact.name.toLowerCase() === name.toLowerCase());
-        return user ? user.bgcolor : "#000000"; // Standardfarbe falls kein Treffer
+        return user ? user.bgcolor : "#000000";
     });
 }
 

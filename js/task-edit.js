@@ -71,8 +71,7 @@ function loadPrioOnEditTask(prio) {
 
 let isCantactOpen = true;async function openContactOverlay(containerID, selectedContactsID) {
     let contactsContainer = document.getElementById(containerID);
-    // Verhindere das wiederholte Hinzufügen von Kontakten
-    contactsContainer.innerHTML = "";  // Container leeren
+    contactsContainer.innerHTML = "";  
 
     if (isCantactOpen) {
         show(containerID);
@@ -94,9 +93,6 @@ let isCantactOpen = true;async function openContactOverlay(containerID, selected
         isCantactOpen = true;
     }
 }
-
-
-// ab hier drei funktionen
 
 function loadAllUsersForContactOnAssignedTo(assigneds, containerID, ID) {
     let contactsContainer = document.getElementById(containerID);
@@ -152,13 +148,7 @@ function loadAssignedOnEditTask(assigneds, containerID) {
         let userBadge = generateUserBadge(assignedName);  
         selectedContactsContainer.innerHTML += generateAssigmentBadgeEditTaskHTML(userBadge, badgeColor, i);
     }
-	console.log(assigned); 
 }
-
-
-// bis hier
-
-
 
 function filterUserOnAssignedTo(inputID, searchContainerID, id) {
 	let searchTerm = document.getElementById(inputID).value;
