@@ -1,50 +1,79 @@
 function loadTaskEdit(TaskID) {
-	let tasks = addedTasks.filter((t) => t["id"] === TaskID);
-	document.getElementById("task_overlay_bg").innerHTML = "";
+    let tasks = addedTasks.filter((t) => t["id"] === TaskID);
+    if (tasks.length === 0) {
+        console.error(`Task with ID ${TaskID} not found.`);
+        return;
+    }
+    console.log("Task loaded for editing:", tasks[0]); // Debugging
 
-	for (let index = 0; index < tasks.length; index++) {
-		let [id, bucket, title, description, prio, category, subtasks, assigneds, duedate, rawDuedate] = getTaskVariables(tasks, index);
-		initEditTask(id, title, description, prio, assigneds, rawDuedate);
-	}
+    let [id, bucket, title, description, prio, category, subtasks, assigneds, dueDate, rawDuedate] = getTaskVariables(tasks, 0);
+    console.log("Subtasks passed to initEditTask:", subtasks); // Debugging
+
+    document.getElementById("task_overlay_bg").innerHTML = "";
+    initEditTask(id, title, description, prio, assigneds, rawDuedate, subtasks); // Subtasks weitergeben
 }
 
 
-function initEditTask(id, title, description, prio, assigneds, duedate) {
-	document.getElementById("task_overlay_bg").innerHTML = generateEditTaskHTML(id, title, description, duedate);
-	loadAllUsersForContactOnAssignedTo(assigneds, "et_contact_overlay", id);
-	loadAssignedOnEditTask(assigneds, "et_selected_contacts");
-	setTodayDateForCalendar("calendar_edit_task");
-	loadPrioOnEditTask(prio);
-	loadSubtasksEditTask("subtask_lists", id);
+async function updateTaskInBackend(taskID) {
+    const task = addedTasks.find(t => t.id === taskID);
+
+    const response = await fetch(`http://localhost:8000/api/tasks/${taskID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            title: task.title,
+            description: task.description,
+            assigned: task.assigned,
+            dueDate: task.duedate,
+            priority: task.prio,
+            category: task.category,
+            subtask: task.subtask,
+            bucket: task.bucket,
+        }),
+    });
+
+    if (response.ok) {
+        console.log("Task successfully updated!");
+    } else {
+        console.error("Failed to update task:", response.statusText);
+    }
+}
+
+function initEditTask(id, title, description, prio, assigneds, duedate, subtasks) {
+    document.getElementById("task_overlay_bg").innerHTML = generateEditTaskHTML(id, title, description, duedate);
+    loadAllUsersForContactOnAssignedTo(assigneds, "et_contact_overlay", id);
+    loadAssignedOnEditTask(assigneds, "et_selected_contacts");
+    setTodayDateForCalendar("calendar_edit_task");
+    loadPrioOnEditTask(prio);
+    loadSubtasksEditTask("subtask_lists", id, subtasks);
 }
 
 
 function updateOpenTask(taskID) {
-	updateOpenTaskTitle(taskID);
-	updateOpenTaskDesc(taskID);
-	updateOpenTaskDueDate(taskID);
-	updateTaskPriority(taskID);
-	renderOpenTask(taskID);
+    updateOpenTaskTitle(taskID);
+    updateOpenTaskDesc(taskID);
+    updateOpenTaskDueDate(taskID);
+    updateTaskPriority(taskID);
+	updateTaskInBackend(taskID);
+    renderOpenTask(taskID);
 }
-
 
 function updateOpenTaskTitle(taskID) {
-	let titleValue = document.getElementById("title_input_ed_task").value;
-	addedTasks[taskID]["title"] = titleValue;
+    let titleValue = document.getElementById("title_input_ed_task").value;
+    task["title"] = titleValue;
 }
-
 
 function updateOpenTaskDesc(taskID) {
 	let descValue = document.getElementById("description_ed_task").value;
 	addedTasks[taskID]["description"] = descValue;
 }
 
-
 function updateOpenTaskDueDate(taskID) {
 	let dueDateValue = document.getElementById("calendar_edit_task").value;
 	addedTasks[taskID]["duedate"] = dueDateValue;
 }
-
 
 function updateTaskPriority(taskID) {
 	let prio = "";
@@ -53,7 +82,6 @@ function updateTaskPriority(taskID) {
 	}
 	addedTasks[taskID]["prio"] = prio;
 }
-
 
 function loadPrioOnEditTask(prio) {
 	if (prio === "Urgent") {
@@ -68,17 +96,14 @@ function loadPrioOnEditTask(prio) {
 	}
 }
 
-
 let isCantactOpen = true;async function openContactOverlay(containerID, selectedContactsID) {
     let contactsContainer = document.getElementById(containerID);
     contactsContainer.innerHTML = "";  
 
     if (isCantactOpen) {
         show(containerID);
-        // Lade die Kontakte aus der Datenbank (wenn sie noch nicht geladen sind)
         await loadDatabaseContacts();
-        // Kontakte im Container laden
-        loadAllUsersForContactOnAssignedTo(contactsData, containerID);  // Hier übergibst du die Kontakte
+        loadAllUsersForContactOnAssignedTo(contactsData, containerID);  
 
         hide(selectedContactsID);
         hide("select-contacts_down");
@@ -204,14 +229,20 @@ function loadSubtask(taskID) {
 	}
 }
 
-function loadSubtasksEditTask(subtaskListID, ID) {
-	let subtaskContainer = document.getElementById(subtaskListID);
-	subtaskContainer.innerHTML = "";
-	let subtask = loadSubtask(ID);
-	for (let i = 0; i < subtask.length; i++) {
-		let subtitle = subtask[i]["subtitle"];
-		subtaskContainer.innerHTML += generateSubtaskListItemHTML(subtitle, i, ID, "subtask_listitem_", "subtask_edit_container", "subtask_edit_input", "subtask_lists");
-	}
+function loadSubtasksEditTask(subtaskListID, ID, subtasks) {
+    let subtaskContainer = document.getElementById(subtaskListID);
+    subtaskContainer.innerHTML = "";
+
+    if (!Array.isArray(subtasks)) {
+        console.error("Subtasks are undefined or not an array:", subtasks);
+        return;
+    }
+
+    for (let i = 0; i < subtasks.length; i++) {
+        let subtitle = subtasks[i]["title"];
+        let isDone = subtasks[i]["subdone"];
+        subtaskContainer.innerHTML += generateSubtaskListItemHTML(subtitle, i, ID, isDone);
+    }
 }
 
 function addSubtask(taskID, subtaskListItemID) {
