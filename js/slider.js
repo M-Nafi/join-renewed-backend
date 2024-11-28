@@ -53,5 +53,4 @@ async function hideTaskOpen(id) {
             console.error(`Netzwerkfehler beim Aktualisieren von Task ${task.id}:`, error);
         }
     }
-    // await setItem("addedTasks", JSON.stringify(addedTasks));
 }

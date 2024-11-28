@@ -79,7 +79,7 @@ function getTaskVariables(tasks, index) {
     let description = task["description"];
     let priority = task["priority"]; 
     let category = task["category"];
-    let subtasks = task["subtask"]; 
+    let subtasks = Array.isArray(task["subtask"]) ? task["subtask"] : []; 
     let assigneds = task["assigned"]; 
     let duedate = formatDueDate(task["dueDate"]); 
     let rawDuedate = task["dueDate"]; 
@@ -169,8 +169,6 @@ function loadSubtaskAreDone(subtasks) {
     });
     return doneSubtask;
 }
-
-
 
 function loadCategoryColor(category) {
     if (category === "Technical Task") {

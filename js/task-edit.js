@@ -4,40 +4,41 @@ function loadTaskEdit(TaskID) {
         console.error(`Task with ID ${TaskID} not found.`);
         return;
     }
-    console.log("Task loaded for editing:", tasks[0]); // Debugging
-
     let [id, bucket, title, description, prio, category, subtasks, assigneds, dueDate, rawDuedate] = getTaskVariables(tasks, 0);
-    console.log("Subtasks passed to initEditTask:", subtasks); // Debugging
-
     document.getElementById("task_overlay_bg").innerHTML = "";
     initEditTask(id, title, description, prio, assigneds, rawDuedate, subtasks); // Subtasks weitergeben
 }
 
-
 async function updateTaskInBackend(taskID) {
-    const task = addedTasks.find(t => t.id === taskID);
-
-    const response = await fetch(`http://localhost:8000/api/tasks/${taskID}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            title: task.title,
-            description: task.description,
-            assigned: task.assigned,
-            dueDate: task.duedate,
-            priority: task.prio,
-            category: task.category,
-            subtask: task.subtask,
-            bucket: task.bucket,
-        }),
-    });
-
-    if (response.ok) {
-        console.log("Task successfully updated!");
-    } else {
-        console.error("Failed to update task:", response.statusText);
+    const task = addedTasks.find(t => t.id === taskID); 
+    if (!task) {
+        console.error(`Task mit ID ${taskID} nicht gefunden`);
+        return;
+    }
+    const updatedTaskData = {
+        title: task.title,
+        description: task.description,
+        assigned: task.assigned,
+        dueDate: task.dueDate,
+        priority: task.priority,
+        category: task.category,
+        subtask: task.subtask
+    };
+    try {
+        const response = await fetch(`http://localhost:8000/api/tasks/${taskID}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedTaskData),
+        });
+        if (response.ok) {
+            console.log("Task updated successfully");
+        } else {
+            console.error(`Failed to update task: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Error updating task:", error);
     }
 }
 
@@ -50,37 +51,60 @@ function initEditTask(id, title, description, prio, assigneds, duedate, subtasks
     loadSubtasksEditTask("subtask_lists", id, subtasks);
 }
 
-
 function updateOpenTask(taskID) {
     updateOpenTaskTitle(taskID);
     updateOpenTaskDesc(taskID);
     updateOpenTaskDueDate(taskID);
     updateTaskPriority(taskID);
-	updateTaskInBackend(taskID);
-    renderOpenTask(taskID);
+    updateTaskInBackend(taskID);
+    loadTaskOpen(taskID); 
+    renderOpenTask(taskID); 
 }
 
 function updateOpenTaskTitle(taskID) {
+    let task = addedTasks.find(t => t.id === taskID);  
+    if (!task) {
+        console.error(`Task mit ID ${taskID} nicht gefunden`);
+        return;
+    }
     let titleValue = document.getElementById("title_input_ed_task").value;
+    if (!titleValue) {
+        console.error("Title input is empty");
+    }
     task["title"] = titleValue;
 }
 
 function updateOpenTaskDesc(taskID) {
-	let descValue = document.getElementById("description_ed_task").value;
-	addedTasks[taskID]["description"] = descValue;
+    let task = addedTasks.find(t => t.id === taskID); 
+    if (!task) {
+        console.error(`Task mit ID ${taskID} nicht gefunden.`);
+        return; 
+    }
+    let descValue = document.getElementById("description_ed_task").value;
+    task["description"] = descValue; 
 }
 
 function updateOpenTaskDueDate(taskID) {
-	let dueDateValue = document.getElementById("calendar_edit_task").value;
-	addedTasks[taskID]["duedate"] = dueDateValue;
+    let task = addedTasks.find(t => t.id === taskID);  
+    if (!task) {
+        console.error(`Task mit ID ${taskID} nicht gefunden.`);
+        return; 
+    }
+    let dueDateValue = document.getElementById("calendar_edit_task").value;
+    task["dueDate"] = dueDateValue;  
 }
 
 function updateTaskPriority(taskID) {
-	let prio = "";
-	if (globalPrioButtonID !== "") {
-		prio = document.getElementById(globalPrioButtonID).value;
-	}
-	addedTasks[taskID]["prio"] = prio;
+    let task = addedTasks.find(t => t.id === taskID);
+    if (!task) {
+        console.error(`Task mit ID ${taskID} nicht gefunden.`);
+        return; 
+    }
+    let prio = "";
+    if (globalPrioButtonID !== "") {
+        prio = document.getElementById(globalPrioButtonID).value;
+    }
+    task["priority"] = prio;
 }
 
 function loadPrioOnEditTask(prio) {

@@ -296,22 +296,19 @@ async function createTask() {
   }
 }
 
-
-
-
-async function pushToJSON(setNewTask, selectedPriority) {
-  addedTasks.push({
-    id: setNewTask,
-    bucket: "to-do",
-    title: enter_title_field.value,
-    description: enter_description_field.value,
-    assigned: newAssigned,
-    duedate: date_field.value,
-    prio: selectedPriority,
-    category: select_category_field.value,
-    subtask: addedSubtasks,
-  });
-}
+// async function pushToJSON(setNewTask, selectedPriority) {
+//   addedTasks.push({
+//     id: setNewTask,
+//     bucket: "to-do",
+//     title: enter_title_field.value,
+//     description: enter_description_field.value,
+//     assigned: newAssigned,
+//     duedate: date_field.value,
+//     prio: selectedPriority,
+//     category: select_category_field.value,
+//     subtask: addedSubtasks,
+//   });
+// }
 
 function createNewTaskID() {
   let newTaskID;

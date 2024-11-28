@@ -3,6 +3,7 @@ async function fetchTaskDetails(taskID) {
         const response = await fetch(`http://localhost:8000/api/tasks/${taskID}/`);
         if (response.ok) {
             const task = await response.json();
+            console.log("Fetched task details:", task); 
             return {
                 id: task.id,
                 title: task.title,
@@ -23,27 +24,51 @@ async function fetchTaskDetails(taskID) {
     } catch (error) {
         console.error("Netzwerkfehler beim Laden der Task-Details:", error);
     }
-    return null; // Falls ein Fehler auftritt
+    return null; 
 }
- 
+
 async function loadTaskOpen(taskID) {
     const task = await fetchTaskDetails(taskID);
     if (task) {
         document.getElementById("task_overlay_bg").innerHTML = "";
         showFrame("task_overlay_bg");
         addOverlayBg("task_overlay_bg");
-        renderOpenTask(task);
+        renderOpenTask(task); 
         frameSlideIn("task_open_overlay_frame");
     } else {
         console.error("Task konnte nicht geladen werden.");
     }
 }
- 
-function renderOpenTask(task) {
-    let { id, title, description, priority, category, subtask, assigned, dueDate } = task;
-    loadTask(id, title, description, priority, category, subtask, assigned, dueDate);
+
+async function renderOpenTask(task) {
+    if (!task.id) {
+        console.error("Fehler: Task-ID ist undefined!");
+        return;
+    }
+    const updatedTask = await fetchTaskDetails(task.id);
+    if (updatedTask) {
+        let { id, title, description, priority, category, subtask, assigned, dueDate } = updatedTask;
+        loadTask(id, title, description, priority, category, subtask, assigned, dueDate);
+    } else {
+        console.error("Task konnte nicht geladen werden.");
+    }
 }
- 
+
+async function fetchTaskDetails(taskID) {
+    try {
+        const response = await fetch(`http://localhost:8000/api/tasks/${taskID}/`);
+        if (response.ok) {
+            const task = await response.json();
+            return task;
+        } else {
+            console.error("Fehler beim Abrufen der Task-Details:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Netzwerkfehler beim Laden der Task-Details:", error);
+    }
+    return null; 
+}
+
 function loadTask(taskID, title, description, priority, category, subtask, assigned, dueDate) {
     let categoryColor = loadCategoryColor(category);
     document.getElementById("task_overlay_bg").innerHTML = generateOpenTaskHTML(
@@ -72,12 +97,12 @@ function loadTaskOpenPrio(prio, taskID) {
  
 function loadAssignedsOpenTask(assigneds, taskID) {
     const assignedElement = document.getElementById("assigned_to_contacts_task_open");
-    assignedElement.innerHTML = ""; // Vorherige Inhalte löschen
+    assignedElement.innerHTML = ""; 
  
     if (assigneds && assigneds.length > 0) {
         assigneds.forEach(assigned => {
-            const badgeColor = getUserColors([assigned])[0]; // Hole die Farbe für den einzelnen Kontakt
-            const userBadge = generateUserBadge(assigned); // Initialen generieren
+            const badgeColor = getUserColors([assigned])[0]; 
+            const userBadge = generateUserBadge(assigned); 
             assignedElement.innerHTML += generateAssigmentHTML(userBadge, badgeColor, assigned.name, taskID);
         });
     } else {
@@ -86,18 +111,23 @@ function loadAssignedsOpenTask(assigneds, taskID) {
 }
  
 function loadSubtasks(subtasks, elementID, taskID) {
-    let subtasksContainer = document.getElementById(elementID);
-    subtasksContainer.innerHTML = "";
-    if (subtasks.length > 0) {
-        subtasks.forEach((subtask, i) => {
-            let { subdone, title } = subtask;
-            subtasksContainer.innerHTML += checkSubtask(subdone, title, i, taskID);
-        });
-    } else {
-        clearElement("label_task_open_subtask");
+    const subtasksContainer = document.getElementById(elementID);
+    if (!subtasksContainer) {
+        console.error("Subtasks-Container nicht gefunden:", elementID);
+        return;
     }
+    if (!subtasks || !Array.isArray(subtasks)) {
+        console.error("Subtasks ist undefined oder kein Array:", subtasks);
+        subtasksContainer.innerHTML = "<p>Keine Subtasks vorhanden</p>";
+        return;
+    }
+    subtasksContainer.innerHTML = "";
+    subtasks.forEach((subtask, index) => {
+        const { subdone, title } = subtask;
+        subtasksContainer.innerHTML += checkSubtask(subdone, title, index, taskID);
+    });
 }
- 
+
 function checkSubtask(subdone, subtitle, subtaskNumber, taskID) {
     if (subdone) {
         return generateSubtasksCheckedHTML(subtitle, subtaskNumber, taskID);
@@ -130,7 +160,6 @@ function getUserColors(assignedNames) {
         return user ? user.bgcolor : "#000000";
     });
 }
-
 
 // // eingeloggter user...
 // function getUserColor(assigned, assignedName, id) {
