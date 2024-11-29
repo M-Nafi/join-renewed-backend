@@ -28,21 +28,52 @@ async function fetchTaskDetails(taskID) {
 }
 
 async function loadTaskOpen(taskID) {
+    if (taskID === undefined) {
+        console.error("Fehler: Task-ID ist undefined!");
+        return;
+    }
     const task = await fetchTaskDetails(taskID);
     if (task) {
-        document.getElementById("task_overlay_bg").innerHTML = "";
+        document.getElementById("task_overlay_bg").innerHTML = ""; 
         showFrame("task_overlay_bg");
         addOverlayBg("task_overlay_bg");
-        renderOpenTask(task); 
-        frameSlideIn("task_open_overlay_frame");
+        if (!task || !task.id) {
+            console.error("Task-Daten sind ungültig:", task);
+            return;
+        }
+        renderOpenTask(task);
+        const overlayFrame = await waitForElement("task_open_overlay_frame");
+        if (overlayFrame) {
+            frameSlideIn("task_open_overlay_frame");
+        } else {
+            console.error("Das Element mit der ID 'task_open_overlay_frame' wurde nicht gefunden.");
+        }
     } else {
         console.error("Task konnte nicht geladen werden.");
     }
 }
 
+
+function waitForElement(id) {
+    return new Promise((resolve, reject) => {
+        const checkInterval = setInterval(() => {
+            const element = document.getElementById(id);
+            if (element) {
+                clearInterval(checkInterval);
+                resolve(element);
+            }
+        }, 10); 
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            reject(new Error(`Element mit der ID '${id}' wurde nicht gefunden.`));
+        }, 500);
+    });
+}
+
+
 async function renderOpenTask(task) {
-    if (!task.id) {
-        console.error("Fehler: Task-ID ist undefined!");
+    if (!task || !task.id) {
+        // console.error("Fehler: Task-ID ist undefined oder Task ist ungültig!");
         return;
     }
     const updatedTask = await fetchTaskDetails(task.id);
@@ -53,6 +84,7 @@ async function renderOpenTask(task) {
         console.error("Task konnte nicht geladen werden.");
     }
 }
+
 
 async function fetchTaskDetails(taskID) {
     try {

@@ -1,7 +1,13 @@
 function frameSlideIn(id) {
-    document.getElementById(id).classList.remove("slide-out");
-    document.getElementById(id).classList.add("slide-in");
+    const element = document.getElementById(id);
+    if (!element) {
+        console.error(`Element mit der ID "${id}" wurde nicht gefunden.`);
+        return;
+    }
+    element.classList.remove("slide-out");
+    element.classList.add("slide-in");
 }
+
 
 function frameSlideOut(id) {
     document.getElementById(id).classList.remove("slide-in");
@@ -27,6 +33,13 @@ function removeFixedBackround(id) {
 }
 
 async function hideTaskOpen(id) {
+    // Sicherstellen, dass das Element existiert
+    const overlayElement = document.getElementById(id);
+    if (!overlayElement) {
+        console.error(`Element mit ID ${id} nicht gefunden!`);
+        return;
+    }
+
     loadBoard();
     frameSlideOut(id);
     removeFixedBackround("main_container_board");
@@ -37,6 +50,7 @@ async function hideTaskOpen(id) {
         hide("task_overlay_bg");
     }, 400);
 
+    // Fetch-Anfragen
     for (let task of addedTasks) {
         try {
             const response = await fetch(`http://localhost:8000/api/tasks/${task.id}/update/`, {
@@ -44,7 +58,7 @@ async function hideTaskOpen(id) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(task), 
+                body: JSON.stringify(task),
             });
             if (!response.ok) {
                 console.error(`Fehler beim Aktualisieren von Task ${task.id}:`, response.statusText);
@@ -54,3 +68,12 @@ async function hideTaskOpen(id) {
         }
     }
 }
+
+function addFixedBackground(id) {
+    document.getElementById(id).classList.add("pos-fixed");
+}
+
+function removeFixedBackround(id) {
+    document.getElementById(id).classList.remove("pos-fixed");
+}
+

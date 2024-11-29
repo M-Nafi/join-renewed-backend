@@ -33,7 +33,7 @@ async function updateTaskInBackend(taskID) {
             body: JSON.stringify(updatedTaskData),
         });
         if (response.ok) {
-            console.log("Task updated successfully");
+            console.log('Task updated successfully');
         } else {
             console.error(`Failed to update task: ${response.statusText}`);
         }
