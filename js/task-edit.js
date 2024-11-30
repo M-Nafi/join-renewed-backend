@@ -1,12 +1,17 @@
-function loadTaskEdit(TaskID) {
+window.assigned = []; 
+let assigneds = [];
+let isCantactOpen = true;
+
+async function loadTaskEdit(TaskID) {
     let tasks = addedTasks.filter((t) => t["id"] === TaskID);
     if (tasks.length === 0) {
         console.error(`Task with ID ${TaskID} not found.`);
         return;
     }
-    let [id, bucket, title, description, prio, category, subtasks, assigneds, dueDate, rawDuedate] = getTaskVariables(tasks, 0);
+    let [id, bucket, title, description, prio, category, subtasks, taskAssigneds, dueDate, rawDuedate] = getTaskVariables(tasks, 0);
+    assigneds = taskAssigneds;
     document.getElementById("task_overlay_bg").innerHTML = "";
-    initEditTask(id, title, description, prio, assigneds, rawDuedate, subtasks); // Subtasks weitergeben
+    initEditTask(id, title, description, prio, assigneds, rawDuedate, subtasks);
 }
 
 async function updateTaskInBackend(taskID) {
@@ -33,7 +38,7 @@ async function updateTaskInBackend(taskID) {
             body: JSON.stringify(updatedTaskData),
         });
         if (response.ok) {
-            console.log('Task updated successfully');
+            return;
         } else {
             console.error(`Failed to update task: ${response.statusText}`);
         }
@@ -58,7 +63,7 @@ function updateOpenTask(taskID) {
     updateTaskPriority(taskID);
     updateTaskInBackend(taskID);
     loadTaskOpen(taskID); 
-    renderOpenTask(taskID); 
+    renderOpenTask(taskID);  
 }
 
 function updateOpenTaskTitle(taskID) {
@@ -120,19 +125,17 @@ function loadPrioOnEditTask(prio) {
 	}
 }
 
-let isCantactOpen = true;async function openContactOverlay(containerID, selectedContactsID) {
+async function openContactOverlay(containerID, selectedContactsID) {
     let contactsContainer = document.getElementById(containerID);
-    contactsContainer.innerHTML = "";  
-
+    contactsContainer.innerHTML = "";
     if (isCantactOpen) {
         show(containerID);
         await loadDatabaseContacts();
         loadAllUsersForContactOnAssignedTo(contactsData, containerID);  
-
+        setTimeout(() => synchronizeCheckboxes(), 100);
         hide(selectedContactsID);
         hide("select-contacts_down");
         show("select-contacts_up");
-
         isCantactOpen = false;
     } else {
         hide(containerID);
@@ -143,57 +146,76 @@ let isCantactOpen = true;async function openContactOverlay(containerID, selected
     }
 }
 
-function loadAllUsersForContactOnAssignedTo(assigneds, containerID, ID) {
+function renderAssignedContacts(assigned) {
+    contactsData.forEach((contact) => {
+        const isChecked = assigned.some(assignedContact => assignedContact.id === contact.id);
+        const contactHTML = generateEditTaskAssigmentContactHTML(
+            contact.bgcolor, 
+            contact.name.charAt(0), 
+            contact.name, 
+            contact.id, 
+            isChecked
+        );
+    });
+}
+
+function loadAllUsersForContactOnAssignedTo(contactsData, containerID, taskID) {
     let contactsContainer = document.getElementById(containerID);
-    contactsContainer.innerHTML = ""; 
+    contactsContainer.innerHTML = "";
+    contactsData.forEach((contact, index) => {
+        const isAssigned = assigneds.some(assignedContact => assignedContact.id === contact.id);
+        const contactHTML = generateEditTaskAssigmentContactHTML(
+            contact.bgcolor,
+            contact.name.charAt(0),
+            contact.name,
+            index,
+            taskID,
+            isAssigned
+        );
+        contactsContainer.innerHTML += contactHTML;
+    });
+    synchronizeCheckboxes(taskID);
+}
 
-    for (let i = 0; i < contactsData.length; i++) { 
-        let userName = contactsData[i]["name"];
-        let userBadge = generateUserBadge(userName);
-        let badgeColor = contactsData[i]["bgcolor"];
-        if (assigned.some(c => c.name === userName)) {
-            contactsContainer.innerHTML += generateEditTaskAssigmentContactsCheckedHTML(badgeColor, userBadge, userName, i, ID);
+function addContactAsAssigned(checkboxID, i, ID) {
+    let checkAssigned = document.getElementById(checkboxID);
+    if (checkAssigned) {
+        let contact = contactsData[i];
+        if (!contact) {
+            console.error("Kontakt nicht gefunden:", i);
+            return;
+        }
+        let deleteContactIndex = assigneds.findIndex(c => c.id === contact.id);
+        if (checkAssigned.checked) {
+            if (deleteContactIndex === -1) {
+                assigneds.push({ name: contact.name, id: contact.id, bgcolor: contact.bgcolor });
+            }
         } else {
-            contactsContainer.innerHTML += generateEditTaskAssigmentContactsHTML(badgeColor, userBadge, userName, i, ID);
+            if (deleteContactIndex !== -1) {
+                assigneds.splice(deleteContactIndex, 1);
+            }
         }
+        loadAssignedOnEditTask(assigneds, "et_selected_contacts");
+        synchronizeCheckboxes(ID);
     }
-    synchronizeCheckboxes(); 
 }
 
-window.assigned = []; 
-
-function addContactAsAssigned(id, i, j) {
-    let checkAssigned = document.getElementById(id);  
-    let contact = contactsData[i];  
-    let deleteContactIndex = assigned.findIndex(c => c.id === contact.id);  
-    if (checkAssigned.checked) {  
-        assigned.push({ name: contact.name, id: contact.id, bgcolor: contact.bgcolor }); 
-    } else if (!checkAssigned.checked && deleteContactIndex !== -1) {  
-        assigned.splice(deleteContactIndex, 1);
-    }
-    loadAssignedOnEditTask(assigned, "et_selected_contacts");
-    synchronizeCheckboxes(); 
-}
-
-function synchronizeCheckboxes() {
-    for (let i = 0; i < contactsData.length; i++) {
-        const contact = contactsData[i];
-        const checkbox = document.getElementById(`checkbox_${contact.id}`);
+function synchronizeCheckboxes(taskID) {
+    contactsData.forEach((contact, index) => {
+        let checkbox = document.getElementById(`checkbox_${taskID}_${index}`);
         if (checkbox) {
-            checkbox.checked = assigned.some(c => c.id === contact.id);
+            checkbox.checked = assigneds.some(a => a.id === contact.id);
         }
-    }
+    });
 }
 
 function loadAssignedOnEditTask(assigneds, containerID) {
     let selectedContactsContainer = document.getElementById(containerID);
     selectedContactsContainer.innerHTML = "";
-
     for (let i = 0; i < assigneds.length; i++) {
         let assigned = assigneds[i];  
         let badgeColor = assigned.bgcolor;  
         let assignedName = assigned.name;  
-
         let userBadge = generateUserBadge(assignedName);  
         selectedContactsContainer.innerHTML += generateAssigmentBadgeEditTaskHTML(userBadge, badgeColor, i);
     }
@@ -201,7 +223,6 @@ function loadAssignedOnEditTask(assigneds, containerID) {
 
 function filterUserOnAssignedTo(inputID, searchContainerID, id) {
 	let searchTerm = document.getElementById(inputID).value;
-	let assigneds = [];
 	isNewTaskEmpty(newTask) ? (assigneds = addedTasks[id]["assigned"]) : (assigneds = newTask["assigned"]);
 	searchTerm = searchTerm.toLowerCase();
 	let contactsContainer = document.getElementById(searchContainerID);
@@ -261,7 +282,6 @@ function loadSubtasksEditTask(subtaskListID, ID, subtasks) {
         console.error("Subtasks are undefined or not an array:", subtasks);
         return;
     }
-
     for (let i = 0; i < subtasks.length; i++) {
         let subtitle = subtasks[i]["title"];
         let isDone = subtasks[i]["subdone"];

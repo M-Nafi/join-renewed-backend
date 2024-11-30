@@ -222,21 +222,23 @@ function generateAssigmentHTML(userBadge, badgeColor, assignedUserName, id) {
     `;
 }
 
-function generateEditTaskAssigmentContactsHTML(badgeColor, userBadge, assignedUserName, i, ID) {
+function generateEditTaskAssigmentContactHTML(badgeColor, userBadge, assignedUserName, i, ID, isChecked) {
+    const checkboxID = `checkbox_${ID}_${i}`; 
+    const checkedAttribute = isChecked ? 'checked' : ''; 
+
     return `
-    <label class="slider-contact-label">
-        <div class="current-contact-slider">
-            <div id="contect_badge${i}" class="contact-badge"
-                style="background-color: ${badgeColor};">
-                <span>${userBadge}</span>
+        <label class="slider-contact-label">
+            <div class="current-contact-slider">
+                <div id="contect_badge${i}" class="contact-badge" style="background-color: ${badgeColor};">
+                    <span>${userBadge}</span>
+                </div>
+                <span>${assignedUserName}</span>
+                <div class="log-in-checkbox">
+                    <input onclick="addContactAsAssigned('${checkboxID}', ${i}, ${ID})" id="${checkboxID}" type="checkbox" ${checkedAttribute} />
+                    <label class="checkbox-edit-task" for="${checkboxID}"></label>
+                </div>
             </div>
-            <span>${assignedUserName} </span>
-            <div class="log-in-checkbox">
-                <input onclick="addContactAsAssigned('${ID}_confirm_contact${i}', ${i}, ${ID})" id="${ID}_confirm_contact${i}" type="checkbox" />
-                <label class="checkbox-edit-task" for="${ID}_confirm_contact${i}"></label>
-            </div>
-        </div>
-    </label>
+        </label>
     `;
 }
 

@@ -61,7 +61,7 @@ async function hideTaskOpen(id) {
                 body: JSON.stringify(task),
             });
             if (!response.ok) {
-                console.error(`Fehler beim Aktualisieren von Task ${task.id}:`, response.statusText);
+                return;
             }
         } catch (error) {
             console.error(`Netzwerkfehler beim Aktualisieren von Task ${task.id}:`, error);
