@@ -185,10 +185,12 @@ function addContactAsAssigned(checkboxID, i, ID) {
         if (checkAssigned.checked) {
             if (deleteContactIndex === -1) {
                 assigneds.push({ name: contact.name, id: contact.id, bgcolor: contact.bgcolor });
+                window.assigned.push({ name: contact.name, id: contact.id, bgcolor: contact.bgcolor });
             }
         } else {
             if (deleteContactIndex !== -1) {
                 assigneds.splice(deleteContactIndex, 1);
+                window.assigned = window.assigned.filter(c => c.id !== contact.id);
             }
         }
         loadAssignedOnEditTask(assigneds, "et_selected_contacts");

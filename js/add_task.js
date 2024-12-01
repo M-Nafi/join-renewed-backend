@@ -258,7 +258,7 @@ async function createTask() {
   const selectedPriority = getSelectedPriority();
   const selectedContacts = window.assigned;  
 
-  const assignedContacts = selectedContacts.map((contact) => ({
+  assigneds = selectedContacts.map((contact) => ({
     name: contact.name,
     id: contact.id,
     bgcolor: contact.bgcolor
@@ -268,7 +268,7 @@ async function createTask() {
     id: setNewTask,
     title: document.getElementById("enter_title_field").value,
     description: document.getElementById("enter_description_field").value,
-    assigned: assignedContacts,  
+    assigned: assigneds,  
     dueDate: document.getElementById("date_field").value,
     priority: selectedPriority,
     category: document.getElementById("select_category_field").value,
