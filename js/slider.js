@@ -33,7 +33,6 @@ function removeFixedBackround(id) {
 }
 
 async function hideTaskOpen(id) {
-    // Sicherstellen, dass das Element existiert
     const overlayElement = document.getElementById(id);
     if (!overlayElement) {
         console.error(`Element mit ID ${id} nicht gefunden!`);
@@ -49,8 +48,6 @@ async function hideTaskOpen(id) {
     setTimeout(function () {
         hide("task_overlay_bg");
     }, 400);
-
-    // Fetch-Anfragen
     for (let task of addedTasks) {
         try {
             const response = await fetch(`http://localhost:8000/api/tasks/${task.id}/update/`, {

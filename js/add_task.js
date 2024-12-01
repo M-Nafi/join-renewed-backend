@@ -3,7 +3,7 @@ let newAssigned = [];
 
 async function initAddTask() {
   await loadUsers();
-  await loadAddedTasks();
+  // await loadAddedTasks();
   loadCurrentUser();
   loadUserBadge();
   getDateToday();
@@ -12,13 +12,13 @@ async function initAddTask() {
   checkIfSendingIsPossible();
 }
 
-async function loadAddedTasks() {
-  try {
-    addedTasks = JSON.parse(await getItem("addedTasks"));
-  } catch (e) {
-    // console.error("Loading Added Tasks error:", e);
-  }
-}
+// async function loadAddedTasks() {
+//   try {
+//     addedTasks = JSON.parse(await getItem("addedTasks"));
+//   } catch (e) {
+//     console.error("Loading Added Tasks error:", e);
+//   }
+// }
 
 function changePrioColor(prio) {
   resetContainers();
@@ -273,7 +273,6 @@ async function createTask() {
     priority: selectedPriority,
     category: document.getElementById("select_category_field").value,
     subtask: addedSubtasks.map((sub) => sub.subtitle), 
-    // assigneds: assignedContacts
   };
 
   try {
@@ -295,20 +294,6 @@ async function createTask() {
     console.error('Netzwerkfehler:', error);
   }
 }
-
-// async function pushToJSON(setNewTask, selectedPriority) {
-//   addedTasks.push({
-//     id: setNewTask,
-//     bucket: "to-do",
-//     title: enter_title_field.value,
-//     description: enter_description_field.value,
-//     assigned: newAssigned,
-//     duedate: date_field.value,
-//     prio: selectedPriority,
-//     category: select_category_field.value,
-//     subtask: addedSubtasks,
-//   });
-// }
 
 function createNewTaskID() {
   let newTaskID;

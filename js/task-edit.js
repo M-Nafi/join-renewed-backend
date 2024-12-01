@@ -2,7 +2,7 @@ window.assigned = [];
 let assigneds = [];
 let isCantactOpen = true;
 
-async function loadTaskEdit(TaskID) {
+function loadTaskEdit(TaskID) {
     let tasks = addedTasks.filter((t) => t["id"] === TaskID);
     if (tasks.length === 0) {
         console.error(`Task with ID ${TaskID} not found.`);
@@ -166,7 +166,7 @@ function loadAllUsersForContactOnAssignedTo(contactsData, containerID, taskID) {
         const isAssigned = assigneds.some(assignedContact => assignedContact.id === contact.id);
         const contactHTML = generateEditTaskAssigmentContactHTML(
             contact.bgcolor,
-            contact.name.charAt(0),
+            generateUserBadge(contact),
             contact.name,
             index,
             taskID,
@@ -181,10 +181,6 @@ function addContactAsAssigned(checkboxID, i, ID) {
     let checkAssigned = document.getElementById(checkboxID);
     if (checkAssigned) {
         let contact = contactsData[i];
-        if (!contact) {
-            console.error("Kontakt nicht gefunden:", i);
-            return;
-        }
         let deleteContactIndex = assigneds.findIndex(c => c.id === contact.id);
         if (checkAssigned.checked) {
             if (deleteContactIndex === -1) {
@@ -320,11 +316,11 @@ function closeSubtaskEditInputFrame(subtaskListItemID, subtaskEditFrameID) {
 
 function updateSubtask(taskID, subtaskListItemID, subtaskEditInputID, subtaskID, subtaskEditFrameID, subtaskList) {
 	let subtask = loadSubtask(taskID);
-	let subtaskEditInput = document.getElementById(subtaskEditInputID).value;
-	if (subtaskEditInput.length !== 0) {
+    let subtaskEditInput = document.getElementById(subtaskEditInputID).value;
+    if (subtaskEditInput.length !== 0) {
 		subtask[subtaskID]["subtitle"] = subtaskEditInput;
 		subtask[subtaskID]["subdone"] = false;
-		closeSubtaskEditInputFrame(subtaskListItemID, subtaskEditFrameID);
-		loadSubtasksEditTask(subtaskList, taskID);
+            closeSubtaskEditInputFrame(subtaskListItemID, subtaskEditFrameID);
+            loadSubtasksEditTask(subtaskList, taskID);
 	}
 }
